@@ -1,0 +1,224 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { getAnnouncementById, reviewPayment } from "@/actions/announcement";
+import {
+  ArrowLeft, Users, CreditCard, CheckCircle2, Clock, FileText,
+  Loader2, Landmark, AlertCircle, CalendarDays, ExternalLink
+} from "lucide-react";
+
+export default function AdminAnnouncementDetailPage() {
+  const params = useParams();
+  const router = useRouter();
+  const id = params.id as string;
+
+  const [ann, setAnn] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [reviewing, setReviewing] = useState<string | null>(null);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    const res = await getAnnouncementById(id);
+    if (res.success) setAnn(res.announcement);
+    else { alert("ไม่พบประกาศนี้"); router.push("/admin/announcements"); }
+    setIsLoading(false);
+  };
+
+  useEffect(() => { if (id) fetchData(); }, [id]);
+
+  const handleReview = async (paymentId: string, action: "APPROVED" | "REJECTED") => {
+    setReviewing(paymentId);
+    await reviewPayment(paymentId, action);
+    await fetchData();
+    setReviewing(null);
+  };
+
+  const formatDate = (d: string) =>
+    new Date(d).toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric" });
+
+  if (isLoading) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+    </div>
+  );
+
+  if (!ann) return null;
+
+  const approved = ann.payments.filter((p: any) => p.status === "APPROVED").length;
+  const pending = ann.payments.filter((p: any) => p.status === "PENDING").length;
+  const unpaid = ann.payments.filter((p: any) => p.status === "UNPAID").length;
+  const total = ann.payments.length;
+
+  return (
+    <div className="max-w-6xl mx-auto space-y-6">
+      {/* Back + Title */}
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => router.push("/admin/announcements")}
+          className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500 hover:text-gray-900"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{ann.title}</h1>
+          <p className="text-gray-500 mt-1 text-sm">รายละเอียดประกาศและสถานะการชำระเงินของนักศึกษา</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left: Info */}
+        <div className="space-y-5">
+          {/* Details card */}
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+            <h3 className="font-bold text-gray-900 mb-4 pb-3 border-b">ข้อมูลการเรียกเก็บเงิน</h3>
+            <div className="space-y-4">
+              {ann.description && (
+                <div>
+                  <p className="text-xs text-gray-500 mb-1 flex items-center gap-1.5"><FileText className="w-3.5 h-3.5" /> รายละเอียด</p>
+                  <p className="text-sm font-medium text-gray-900">{ann.description}</p>
+                </div>
+              )}
+              <div>
+                <p className="text-xs text-gray-500 mb-1 flex items-center gap-1.5"><CreditCard className="w-3.5 h-3.5" /> ยอดเงิน</p>
+                <p className="text-2xl font-bold text-blue-600">฿{ann.amount.toFixed(2)}</p>
+              </div>
+              <div className="pt-3 border-t border-gray-100">
+                <p className="text-xs text-gray-500 mb-1 flex items-center gap-1.5"><Landmark className="w-3.5 h-3.5" /> บัญชีรับโอน</p>
+                <p className="text-sm font-semibold text-gray-900">{ann.bankAccount}</p>
+                <p className="text-xs text-gray-500">{ann.bankName}</p>
+              </div>
+              <div className="pt-3 border-t border-gray-100">
+                <p className="text-xs text-gray-500 mb-1 flex items-center gap-1.5"><CalendarDays className="w-3.5 h-3.5" /> ระยะเวลา</p>
+                <p className="text-sm text-gray-900">{formatDate(ann.startDate)}</p>
+                <p className="text-xs text-gray-500">ถึง</p>
+                <p className="text-sm font-semibold text-red-600">{formatDate(ann.dueDate)}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Summary card */}
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+            <h3 className="font-bold text-gray-900 mb-4 pb-3 border-b">สรุปสถานะ</h3>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600 flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> ชำระแล้ว</span>
+                <span className="font-bold text-green-600">{approved} คน</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600 flex items-center gap-2"><Clock className="w-4 h-4 text-yellow-500" /> รอตรวจสลิป</span>
+                <span className="font-bold text-yellow-600">{pending} คน</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600 flex items-center gap-2"><AlertCircle className="w-4 h-4 text-red-400" /> ยังไม่ชำระ</span>
+                <span className="font-bold text-red-500">{unpaid} คน</span>
+              </div>
+              <div className="pt-3 border-t border-gray-100">
+                <div className="w-full bg-gray-100 rounded-full h-2">
+                  <div
+                    className="bg-green-500 h-2 rounded-full transition-all"
+                    style={{ width: total > 0 ? `${(approved / total) * 100}%` : "0%" }}
+                  />
+                </div>
+                <p className="text-xs text-gray-400 mt-1 text-right">{approved}/{total} คน ({total > 0 ? Math.round((approved / total) * 100) : 0}%)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Students Table */}
+        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+          <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-gray-500" />
+              <h3 className="font-bold text-gray-900">รายชื่อนักศึกษา</h3>
+            </div>
+            <span className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full border border-gray-200 shadow-sm">{total} คน</span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="text-xs font-medium text-gray-500 border-b border-gray-100">
+                  <th className="p-4 pl-5">รหัสนักศึกษา</th>
+                  <th className="p-4">ชื่อ - นามสกุล</th>
+                  <th className="p-4 text-center">สถานะ</th>
+                  <th className="p-4 text-center">สลิป/ดำเนินการ</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {ann.payments.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="p-12 text-center text-gray-400">
+                      ยังไม่มีนักศึกษาในระบบ
+                    </td>
+                  </tr>
+                ) : (
+                  ann.payments.map((payment: any) => (
+                    <tr key={payment.id} className="hover:bg-gray-50/50 transition-colors">
+                      <td className="p-4 pl-5 font-mono text-sm text-gray-700">{payment.user.studentId}</td>
+                      <td className="p-4 text-sm text-gray-900 font-medium">
+                        {payment.user.firstName} {payment.user.lastName}
+                      </td>
+                      <td className="p-4 text-center">
+                        {payment.status === "APPROVED" ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <CheckCircle2 className="w-3 h-3" /> ชำระแล้ว
+                          </span>
+                        ) : payment.status === "PENDING" ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            <Clock className="w-3 h-3" /> รอตรวจสลิป
+                          </span>
+                        ) : payment.status === "REJECTED" ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            <AlertCircle className="w-3 h-3" /> ปฏิเสธ
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                            ยังไม่ชำระ
+                          </span>
+                        )}
+                      </td>
+                      <td className="p-4 text-center">
+                        {payment.status === "PENDING" ? (
+                          <div className="flex items-center justify-center gap-2">
+                            {payment.slipUrl && (
+                              <a
+                                href={payment.slipUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                              >
+                                <ExternalLink className="w-3 h-3" /> ดูสลิป
+                              </a>
+                            )}
+                            <button
+                              disabled={reviewing === payment.id}
+                              onClick={() => handleReview(payment.id, "APPROVED")}
+                              className="px-2 py-1 rounded-md text-xs font-medium bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
+                            >
+                              {reviewing === payment.id ? "..." : "อนุมัติ"}
+                            </button>
+                            <button
+                              disabled={reviewing === payment.id}
+                              onClick={() => handleReview(payment.id, "REJECTED")}
+                              className="px-2 py-1 rounded-md text-xs font-medium bg-red-100 text-red-700 hover:bg-red-200 transition-colors disabled:opacity-50"
+                            >
+                              ปฏิเสธ
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-gray-400">-</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

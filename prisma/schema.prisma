@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  username  String    @unique
+  firstName String
+  lastName  String
+  studentId String    @unique
+  password  String
+  role      String    @default("STUDENT") // "STUDENT" or "ADMIN"
+  createdAt DateTime  @default(now())
+
+  payments  Payment[]
+}
+
+model Announcement {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  amount      Float
+  bankAccount String
+  bankName    String
+  startDate   DateTime
+  dueDate     DateTime
+  createdAt   DateTime  @default(now())
+
+  payments    Payment[]
+}
+
+model Payment {
+  id             String       @id @default(uuid())
+  userId         String
+  announcementId String
+  slipUrl        String?
+  status         String       @default("UNPAID") // "UNPAID", "PENDING", "APPROVED", "REJECTED"
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  user           User         @relation(fields: [userId], references: [id])
+  announcement   Announcement @relation(fields: [announcementId], references: [id])
+}
+
+model GeneralFund {
+  id              String   @id @default(uuid())
+  generalBalance  Float    @default(0) // ยอดเงินกองกลางคงเหลือ (กรอกเอง)
+  classFund       Float    @default(0) // เงินรุ่นที่เหลือ (กรอกเอง)
+  updatedAt       DateTime @updatedAt
+  updatedBy       String?  // ชื่อผู้อัปเดต
+}
