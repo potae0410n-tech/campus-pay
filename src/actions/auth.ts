@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 
-const ADMIN_SECRET_CODE = "ilovIT2568"; // รหัสลับสำหรับสมัครแอดมิน
+const ADMIN_SECRET_CODE = "iloveIT2568"; // รหัสลับสำหรับสมัครแอดมิน
 
 // ---- ล็อกอิน ----
 export async function loginUser(identifier: string, password: string) {
