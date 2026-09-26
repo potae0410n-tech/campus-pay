@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getRoomById } from "@/actions/room";
-import { ArrowLeft, Users, CreditCard, CheckCircle2, Clock, FileText, Loader2, Landmark, Lock } from "lucide-react";
+import { ArrowLeft, Users, CreditCard, CheckCircle2, Clock, FileText, Loader2, Landmark, Lock, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminRoomDetailPage() {
