@@ -279,7 +279,7 @@ export default function LoginPage() {
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-purple-400 hover:text-purple-600"
                     >
                       {showAdminCode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>https://127.0.0.1:65240/static/artifacts/8fe0fbce-c8db-49d2-a20c-179de5f9a024/.user_uploaded/media_1789887476868.png?csrf=b57257cf-932b-4a51-bac2-fc20f56fb370
+                    </button>
                   </div>
                 </div>
               )}
