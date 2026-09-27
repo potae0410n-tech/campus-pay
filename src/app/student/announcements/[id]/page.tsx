@@ -24,6 +24,7 @@ export default function StudentAnnouncementDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showStudentList, setShowStudentList] = useState(false);
 
   const handleCopyAccount = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -285,47 +286,159 @@ export default function StudentAnnouncementDetailPage() {
         </div>
       </div>
 
-        {/* รายชื่อเพื่อนในประกาศ */}
+        {/* สรุปยอดชำระ + ปุ่มดูรายชื่อ */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
           <div className="p-5 border-b border-gray-100 flex items-center gap-2 bg-gray-50/50">
             <Users className="w-4 h-4 text-gray-500" />
-            <h2 className="font-bold text-gray-900">สถานะเพื่อนๆ</h2>
-            <span className="ml-auto text-xs text-gray-400">{ann.payments.length} คน</span>
+            <h2 className="font-bold text-gray-900">สรุปยอดชำระ</h2>
+            <span className="ml-auto text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium">{ann.payments.length} คน</span>
           </div>
-          <div className="overflow-y-auto max-h-72">
-            <table className="w-full text-sm">
-              <thead className="text-xs text-gray-500 border-b border-gray-100">
-                <tr>
-                  <th className="px-4 py-3 text-left">ชื่อ</th>
-                  <th className="px-4 py-3 text-center">สถานะ</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {ann.payments.map((p: any) => {
-                  const isMe = p.user.studentId === currentStudentId;
-                  return (
-                    <tr key={p.id} className={isMe ? "bg-blue-50/40" : "hover:bg-gray-50/50"}>
-                      <td className="px-4 py-2.5">
-                        <span className="font-medium text-gray-900">{p.user.firstName} {p.user.lastName}</span>
-                        {isMe && <span className="ml-1.5 text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">ฉัน</span>}
-                      </td>
-                      <td className="px-4 py-2.5 text-center">
-                        {p.status === "APPROVED" ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-green-700"><CheckCircle2 className="w-3 h-3" /> ชำระแล้ว</span>
-                        ) : p.status === "PENDING" ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-yellow-600"><Clock className="w-3 h-3" /> รอตรวจ</span>
-                        ) : (
-                          <span className="text-xs text-gray-400">ยังไม่ชำระ</span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+          <div className="p-5 space-y-3">
+            {/* สรุปสถิติ */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-green-50 border border-green-100 rounded-xl p-3 text-center">
+                <p className="text-xl font-bold text-green-700">{ann.payments.filter((p: any) => p.status === "APPROVED").length}</p>
+                <p className="text-[11px] text-green-600 font-medium mt-0.5">ชำระแล้ว</p>
+              </div>
+              <div className="bg-yellow-50 border border-yellow-100 rounded-xl p-3 text-center">
+                <p className="text-xl font-bold text-yellow-600">{ann.payments.filter((p: any) => p.status === "PENDING").length}</p>
+                <p className="text-[11px] text-yellow-600 font-medium mt-0.5">รอตรวจ</p>
+              </div>
+              <div className="bg-gray-50 border border-gray-100 rounded-xl p-3 text-center">
+                <p className="text-xl font-bold text-gray-500">{ann.payments.filter((p: any) => p.status !== "APPROVED" && p.status !== "PENDING").length}</p>
+                <p className="text-[11px] text-gray-500 font-medium mt-0.5">ยังไม่ชำระ</p>
+              </div>
+            </div>
+
+            {/* แถบความคืบหน้า */}
+            <div>
+              <div className="flex justify-between text-xs text-gray-500 mb-1.5">
+                <span>ความคืบหน้าการชำระเงิน</span>
+                <span className="font-semibold text-gray-700">
+                  {ann.payments.length > 0
+                    ? Math.round((ann.payments.filter((p: any) => p.status === "APPROVED").length / ann.payments.length) * 100)
+                    : 0}%
+                </span>
+              </div>
+              <div className="w-full bg-gray-100 rounded-full h-2">
+                <div
+                  className="bg-green-500 h-2 rounded-full transition-all duration-500"
+                  style={{
+                    width: ann.payments.length > 0
+                      ? `${(ann.payments.filter((p: any) => p.status === "APPROVED").length / ann.payments.length) * 100}%`
+                      : "0%"
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* ปุ่มดูรายชื่อ */}
+            <button
+              onClick={() => setShowStudentList(true)}
+              className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl border border-blue-100 transition-colors"
+            >
+              <Users className="w-4 h-4" />
+              ดูรายชื่อนักศึกษาทั้งหมด
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Modal รายชื่อนักศึกษาทั้งหมด */}
+      {showStudentList && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+          onClick={(e) => { if (e.target === e.currentTarget) setShowStudentList(false); }}
+        >
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50/80">
+              <div className="flex items-center gap-2">
+                <Users className="w-5 h-5 text-blue-600" />
+                <h3 className="font-bold text-gray-900">รายชื่อนักศึกษา</h3>
+                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">{ann.payments.length} คน</span>
+              </div>
+              <button
+                onClick={() => setShowStudentList(false)}
+                className="text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg p-1.5 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Notice */}
+            <div className="px-5 py-3 bg-amber-50 border-b border-amber-100 flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              <p className="text-xs text-amber-700">ข้อมูลนี้จะแสดงเฉพาะสถานะ ไม่เปิดเผยรายละเอียดสลิปของเพื่อนร่วมรายการ</p>
+            </div>
+
+            {/* Table */}
+            <div className="overflow-y-auto flex-1">
+              <table className="w-full text-sm">
+                <thead className="text-xs text-gray-500 border-b border-gray-100 sticky top-0 bg-white">
+                  <tr>
+                    <th className="px-4 py-3 text-left w-8">#</th>
+                    <th className="px-4 py-3 text-left">ชื่อ - นามสกุล</th>
+                    <th className="px-4 py-3 text-center">สถานะ</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {ann.payments.map((p: any, idx: number) => {
+                    const isMe = p.user.studentId === currentStudentId;
+                    return (
+                      <tr key={p.id} className={isMe ? "bg-blue-50/60" : "hover:bg-gray-50/50"}>
+                        <td className="px-4 py-3 text-xs text-gray-400 font-medium">{idx + 1}</td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            <div
+                              className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                              style={{ backgroundColor: isMe ? "#2563eb" : `hsl(${(p.user.firstName.charCodeAt(0) * 37) % 360}, 55%, 55%)` }}
+                            >
+                              {p.user.firstName.charAt(0)}
+                            </div>
+                            <div>
+                              <p className="font-medium text-gray-900 text-sm leading-tight">{p.user.firstName} {p.user.lastName}</p>
+                              {isMe && <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">ฉัน</span>}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          {p.status === "APPROVED" ? (
+                            <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-full font-medium">
+                              <CheckCircle2 className="w-3 h-3" /> ชำระแล้ว
+                            </span>
+                          ) : p.status === "PENDING" ? (
+                            <span className="inline-flex items-center gap-1 text-xs text-yellow-700 bg-yellow-50 px-2 py-1 rounded-full font-medium">
+                              <Clock className="w-3 h-3" /> รอตรวจ
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full font-medium">
+                              ยังไม่ชำระ
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Footer */}
+            <div className="px-5 py-3 border-t border-gray-100 bg-gray-50/50 flex justify-end">
+              <button
+                onClick={() => setShowStudentList(false)}
+                className="px-4 py-2 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 rounded-xl border border-gray-200 transition-colors"
+              >
+                ปิด
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
