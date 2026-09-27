@@ -9,7 +9,7 @@ import {
   Loader2, Landmark, AlertCircle, CalendarDays, UploadCloud, Users,
   ImageIcon, ExternalLink, QrCode, Copy, Check
 } from "lucide-react";
-import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
+import { UploadButton, UploadDropzone, useUploadThing } from "@/lib/uploadthing";
 import generatePayload from "promptpay-qr";
 import { QRCodeSVG } from "qrcode.react";
 
@@ -25,6 +25,36 @@ export default function StudentAnnouncementDetailPage() {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showStudentList, setShowStudentList] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [isEditingSlip, setIsEditingSlip] = useState(false);
+
+  const { startUpload, isUploading } = useUploadThing("slipUploader", {
+    onClientUploadComplete: async (res) => {
+      if (res && res[0] && myPayment) {
+        await uploadSlip(myPayment.id, res[0].url);
+        setUploadSuccess(true);
+        setIsEditingSlip(false);
+        await fetchData();
+      }
+    },
+    onUploadError: (error) => {
+      alert(`อัปโหลดไม่สำเร็จ: ${error.message}`);
+    },
+  });
+
+  const handleFiles = async (files: FileList | File[] | null) => {
+    if (!files || files.length === 0) return;
+    const file = files[0];
+    if (!file.type.startsWith("image/")) {
+      alert("กรุณาเลือกไฟล์รูปภาพ เช่น JPG, PNG");
+      return;
+    }
+    if (file.size > 4 * 1024 * 1024) {
+      alert("ไฟล์รูปภาพต้องมีขนาดไม่เกิน 4MB");
+      return;
+    }
+    await startUpload([file]);
+  };
 
   const handleCopyAccount = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -219,19 +249,29 @@ export default function StudentAnnouncementDetailPage() {
             </div>
           ) : myPayment?.status === "PENDING" ? (
             <div className="space-y-4">
-              <div className="text-center py-8 border-2 border-dashed border-yellow-200 bg-yellow-50 rounded-xl">
-                <Clock className="w-12 h-12 text-yellow-500 mx-auto mb-3" />
-                <h3 className="font-bold text-yellow-800 mb-1">อยู่ระหว่างการตรวจสอบ</h3>
-                <p className="text-xs text-yellow-600">รอเหรัญญิกตรวจสอบสลิปของคุณ</p>
+              <div className="text-center py-6 border-2 border-dashed border-yellow-200 bg-yellow-50 rounded-xl">
+                <Clock className="w-10 h-10 text-yellow-500 mx-auto mb-2" />
+                <h3 className="font-bold text-yellow-800 text-sm mb-0.5">อยู่ระหว่างการตรวจสอบ</h3>
+                <p className="text-xs text-yellow-600">เหรัญญิกกำลังตรวจสอบสลิปของคุณ</p>
               </div>
+
               {myPayment?.slipUrl && (
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                  <p className="text-xs text-gray-500 mb-2 font-medium">สลิปที่คุณส่ง:</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-xs text-gray-600 font-medium">สลิปที่คุณส่ง:</p>
+                    <button
+                      type="button"
+                      onClick={() => setIsEditingSlip(!isEditingSlip)}
+                      className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg transition-colors border border-blue-100 shadow-xs"
+                    >
+                      {isEditingSlip ? "✕ ยกเลิก" : "🔄 แก้ไข / ส่งสลิปใหม่"}
+                    </button>
+                  </div>
                   <div className="relative">
                     <img
                       src={myPayment.slipUrl}
                       alt="สลิปโอนเงิน"
-                      className="w-full rounded-lg object-contain max-h-48 border border-gray-200"
+                      className="w-full rounded-lg object-contain max-h-48 border border-gray-200 bg-white"
                       onError={(e) => {
                         (e.target as HTMLImageElement).style.display = "none";
                       }}
@@ -247,59 +287,148 @@ export default function StudentAnnouncementDetailPage() {
                   </div>
                 </div>
               )}
+
+              {/* ส่วนแก้ไขสลิป */}
+              {isEditingSlip && (
+                <div className="space-y-2 pt-2 border-t border-gray-100">
+                  <p className="text-xs font-semibold text-gray-700">ลากหรือเลือกรูปสลิปใหม่เพื่อแทนที่อันเดิม:</p>
+                  <div
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setIsDragOver(true);
+                    }}
+                    onDragLeave={() => setIsDragOver(false)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setIsDragOver(false);
+                      handleFiles(e.dataTransfer.files);
+                    }}
+                    onClick={() => {
+                      if (!isUploading) {
+                        document.getElementById("slip-file-input-edit")?.click();
+                      }
+                    }}
+                    className={`relative border-2 border-dashed rounded-2xl p-6 transition-all flex flex-col items-center justify-center min-h-[160px] text-center cursor-pointer ${
+                      isDragOver
+                        ? "border-blue-600 bg-blue-100/60 scale-[1.01]"
+                        : "border-blue-200 hover:border-blue-400 bg-blue-50/30"
+                    }`}
+                  >
+                    <input
+                      id="slip-file-input-edit"
+                      type="file"
+                      accept="image/png, image/jpeg, image/jpg, image/webp"
+                      className="hidden"
+                      onChange={(e) => {
+                        if (e.target.files) handleFiles(e.target.files);
+                      }}
+                    />
+
+                    {isUploading ? (
+                      <div className="flex flex-col items-center gap-2.5 py-4">
+                        <Loader2 className="w-9 h-9 text-blue-600 animate-spin" />
+                        <div>
+                          <p className="text-sm font-bold text-gray-900">กำลังอัปโหลดสลิปใหม่...</p>
+                          <p className="text-xs text-gray-500 mt-0.5">กรุณารอสักครู่</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center">
+                        <UploadCloud className="w-9 h-9 text-blue-500 mb-2" />
+                        <p className="text-sm font-bold text-gray-800">
+                          {isDragOver ? "วางสลิปใหม่ตรงนี้ได้เลย!" : "ลากสลิปใหม่มาวาง หรือคลิกเลือกรูป"}
+                        </p>
+                        <p className="text-[11px] text-gray-400 mt-1">อัปโหลดทันที ไม่ต้องกดยืนยัน</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           ) : uploadSuccess ? (
-            <div className="text-center py-10 border-2 border-dashed border-blue-200 bg-blue-50 rounded-xl">
-              <CheckCircle2 className="w-12 h-12 text-blue-500 mx-auto mb-3" />
-              <h3 className="font-bold text-blue-800 mb-1">ส่งสลิปเรียบร้อย!</h3>
-              <p className="text-xs text-blue-600">รอเหรัญญิกตรวจสอบสักครู่นะครับ</p>
+            <div className="space-y-4">
+              <div className="text-center py-8 border-2 border-dashed border-green-200 bg-green-50 rounded-xl">
+                <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                <h3 className="font-bold text-green-800 mb-1">ส่งสลิปเรียบร้อย!</h3>
+                <p className="text-xs text-green-600">รอเหรัญญิกตรวจสอบสักครู่นะครับ</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setUploadSuccess(false);
+                  setIsEditingSlip(true);
+                }}
+                className="w-full py-2 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors border border-blue-100"
+              >
+                🔄 ต้องการแก้ไขหรือเปลี่ยนรูปสลิป
+              </button>
             </div>
           ) : (
             <div className="space-y-4">
               <p className="text-sm text-gray-500">
-                ลากรูปภาพสลิปมาวาง หรือกดเลือกไฟล์จากโทรศัพท์/คอมพิวเตอร์ได้เลยครับ
+                ลากรูปภาพสลิปมาวาง หรือคลิกเลือกไฟล์เพื่ออัปโหลดได้ทันทีครับ
               </p>
 
-              {/* Upload Dropzone (รองรับลากและวางรูปสลิป) */}
-              <div className="w-full">
-                <UploadDropzone
-                  endpoint="slipUploader"
-                  onClientUploadComplete={async (res) => {
-                    if (res && res[0] && myPayment) {
-                      await uploadSlip(myPayment.id, res[0].url);
-                      setUploadSuccess(true);
-                      await fetchData();
-                    }
-                  }}
-                  onUploadError={(error: Error) => {
-                    alert(`อัปโหลดไม่สำเร็จ: ${error.message}`);
-                  }}
-                  appearance={{
-                    container: "border-2 border-dashed border-blue-200 hover:border-blue-500 bg-blue-50/30 rounded-2xl p-6 transition-all cursor-pointer flex flex-col items-center justify-center min-h-[190px]",
-                    uploadIcon: "text-blue-500 w-12 h-12 mb-2",
-                    label: "text-sm font-semibold text-gray-700 hover:text-blue-600 mt-2 text-center",
-                    allowedContent: "text-xs text-gray-400 mt-1",
-                    button: "bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-xl shadow-sm mt-3 transition-all",
-                  }}
-                  content={{
-                    uploadIcon: <UploadCloud className="w-12 h-12 text-blue-500 mb-2" />,
-                    label({ isDragActive }) {
-                      return isDragActive
-                        ? "วางรูปสลิปที่นี่เลย!"
-                        : "ลากรูปสลิปมาวางที่นี่ หรือคลิกเพื่อเลือกไฟล์";
-                    },
-                    allowedContent: "JPG, PNG สูงสุด 4MB",
-                    button({ ready, isUploading }) {
-                      if (isUploading) return "กำลังอัปโหลดสลิป...";
-                      return ready ? "📎 เลือกหรืออัปโหลดสลิป" : "กำลังโหลด...";
-                    },
+              {/* Instant Auto-Upload Dropzone */}
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(true);
+                }}
+                onDragLeave={() => setIsDragOver(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(false);
+                  handleFiles(e.dataTransfer.files);
+                }}
+                onClick={() => {
+                  if (!isUploading) {
+                    document.getElementById("slip-file-input")?.click();
+                  }
+                }}
+                className={`relative border-2 border-dashed rounded-2xl p-6 transition-all flex flex-col items-center justify-center min-h-[190px] text-center cursor-pointer ${
+                  isDragOver
+                    ? "border-blue-600 bg-blue-100/60 scale-[1.01]"
+                    : "border-blue-200 hover:border-blue-400 bg-blue-50/30"
+                }`}
+              >
+                <input
+                  id="slip-file-input"
+                  type="file"
+                  accept="image/png, image/jpeg, image/jpg, image/webp"
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.files) handleFiles(e.target.files);
                   }}
                 />
-              </div>
 
-              <p className="text-xs text-gray-400 text-center">
-                * รองรับการลากไฟล์รูปภาพมาวาง หรือคลิกเพื่อเลือกไฟล์ (JPG, PNG ขนาดไม่เกิน 4MB)
-              </p>
+                {isUploading ? (
+                  <div className="flex flex-col items-center gap-2.5 py-4">
+                    <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
+                    <div>
+                      <p className="text-sm font-bold text-gray-900">กำลังอัปโหลดสลิป...</p>
+                      <p className="text-xs text-gray-500 mt-0.5">กรุณารอสักครู่ ระบบกำลังส่งให้เหรัญญิก</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-2.5 transition-colors ${
+                      isDragOver ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-600"
+                    }`}>
+                      <UploadCloud className="w-7 h-7" />
+                    </div>
+                    <p className="text-sm font-bold text-gray-800">
+                      {isDragOver ? "วางรูปสลิปตรงนี้ได้เลย!" : "ลากรูปสลิปมาวางที่นี่"}
+                    </p>
+                    <p className="text-xs text-blue-600 font-semibold mt-1">
+                      หรือคลิกเพื่อเลือกรูปภาพจากเครื่อง
+                    </p>
+                    <p className="text-[11px] text-gray-400 mt-2">
+                      รองรับ JPG, PNG ขนาดไม่เกิน 4MB (อัปโหลดอัตโนมัติทันที ไม่ต้องกดปุ่มยืนยัน)
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
