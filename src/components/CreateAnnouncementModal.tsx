@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { X, Loader2, CalendarDays, CreditCard, Info, DollarSign, Building } from "lucide-react";
+import { X, Loader2, CalendarDays, CreditCard, Info, DollarSign, Building, QrCode } from "lucide-react";
 import { createAnnouncement } from "@/actions/announcement";
+import { UploadButton } from "@/lib/uploadthing";
 
 interface Props {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface Props {
 
 export default function CreateAnnouncementModal({ isOpen, onClose, onCreated }: Props) {
   const [isLoading, setIsLoading] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -40,11 +42,13 @@ export default function CreateAnnouncementModal({ isOpen, onClose, onCreated }: 
       bankName: form.bankName,
       startDate: form.startDate,
       dueDate: form.dueDate,
+      qrCodeUrl: qrCodeUrl || undefined,
     });
 
     if (res.success) {
       onCreated();
       onClose();
+      setQrCodeUrl("");
       setForm({ title: "", description: "", amount: "", bankAccount: "", bankName: "", startDate: "", dueDate: "" });
     } else {
       alert("เกิดข้อผิดพลาด: " + res.error);
@@ -171,6 +175,45 @@ export default function CreateAnnouncementModal({ isOpen, onClose, onCreated }: 
                 className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm transition-colors"
               />
             </div>
+          </div>
+
+          {/* QR Code Upload (Optional) */}
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-3.5">
+            <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1.5">
+              <QrCode className="w-4 h-4 text-blue-500" /> รูปภาพ QR Code สำหรับสแกนจ่าย (ไม่บังคับ)
+            </label>
+            <p className="text-xs text-gray-500 mb-3">หากมีรูป QR Code พร้อมเพย์ หรือ ธนาคาร สามารถอัปโหลดไว้ให้นักศึกษาสแกนได้ทันที</p>
+            {qrCodeUrl ? (
+              <div className="flex items-center gap-3 bg-white p-2.5 rounded-lg border border-gray-200">
+                <img src={qrCodeUrl} alt="QR Code" className="w-14 h-14 object-contain rounded border border-gray-100" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-green-700">✓ อัปโหลดรูป QR เรียบร้อย</p>
+                  <button
+                    type="button"
+                    onClick={() => setQrCodeUrl("")}
+                    className="text-xs text-red-500 hover:text-red-700 mt-1 underline"
+                  >
+                    ลบรูปนี้
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <UploadButton
+                endpoint="qrUploader"
+                onClientUploadComplete={(res) => {
+                  if (res && res[0]) setQrCodeUrl(res[0].url);
+                }}
+                onUploadError={(err: Error) => alert(`อัปโหลดไม่สำเร็จ: ${err.message}`)}
+                appearance={{
+                  button: "bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors",
+                  allowedContent: "text-[11px] text-gray-400 mt-1",
+                }}
+                content={{
+                  button: "📷 เลือกรูป QR Code",
+                  allowedContent: "JPG, PNG สูงสุด 4MB",
+                }}
+              />
+            )}
           </div>
 
           <div className="pt-2">

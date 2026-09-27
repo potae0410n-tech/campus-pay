@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getAnnouncementById, reviewPayment } from "@/actions/announcement";
+import { getAnnouncementById, reviewPayment, updateAnnouncementQr } from "@/actions/announcement";
 import {
   ArrowLeft, Users, CreditCard, CheckCircle2, Clock, FileText,
-  Loader2, Landmark, AlertCircle, CalendarDays, ExternalLink
+  Loader2, Landmark, AlertCircle, CalendarDays, ExternalLink, QrCode, UploadCloud
 } from "lucide-react";
+import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
 
 export default function AdminAnnouncementDetailPage() {
   const params = useParams();
@@ -95,6 +96,98 @@ export default function AdminAnnouncementDetailPage() {
                 <p className="text-sm font-semibold text-red-600">{formatDate(ann.dueDate)}</p>
               </div>
             </div>
+          </div>
+
+          {/* QR Code Upload Card */}
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center justify-between mb-3 pb-2 border-b">
+              <h3 className="font-bold text-gray-900 flex items-center gap-2 text-sm">
+                <QrCode className="w-4 h-4 text-blue-600" />
+                รูป QR Code รับเงิน
+              </h3>
+              {ann.qrCodeUrl && (
+                <span className="text-[11px] bg-green-50 text-green-700 px-2 py-0.5 rounded-full font-semibold border border-green-200">
+                  มีรูป QR แล้ว
+                </span>
+              )}
+            </div>
+
+            {ann.qrCodeUrl ? (
+              <div className="space-y-3">
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 flex flex-col items-center">
+                  <img
+                    src={ann.qrCodeUrl}
+                    alt="QR Code สำหรับรับเงิน"
+                    className="w-48 h-48 object-contain rounded-lg border border-gray-200 bg-white"
+                  />
+                  <a
+                    href={ann.qrCodeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 mt-2 font-medium"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" /> ดูรูปขนาดเต็ม
+                  </a>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-2 text-center">อัปโหลดรูป QR Code ใหม่เพื่อเปลี่ยน:</p>
+                  <UploadButton
+                    endpoint="qrUploader"
+                    onClientUploadComplete={async (res) => {
+                      if (res && res[0]) {
+                        await updateAnnouncementQr(ann.id, res[0].url);
+                        await fetchData();
+                      }
+                    }}
+                    onUploadError={(err: Error) => alert(`อัปโหลดไม่สำเร็จ: ${err.message}`)}
+                    appearance={{
+                      button: "w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold py-2 rounded-xl transition-colors border border-gray-200 shadow-xs",
+                      allowedContent: "text-[10px] text-gray-400 mt-1",
+                    }}
+                    content={{
+                      button: "🔄 เปลี่ยนรูป QR Code",
+                      allowedContent: "JPG, PNG สูงสุด 4MB",
+                    }}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <p className="text-xs text-gray-500">
+                  อัปโหลดรูป QR Code (เช่น แคปรูป QR จากแอปธนาคาร/พร้อมเพย์) เพื่อแสดงในหน้านักศึกษา
+                </p>
+                <UploadDropzone
+                  endpoint="qrUploader"
+                  onClientUploadComplete={async (res) => {
+                    if (res && res[0]) {
+                      await updateAnnouncementQr(ann.id, res[0].url);
+                      await fetchData();
+                    }
+                  }}
+                  onUploadError={(err: Error) => alert(`อัปโหลดไม่สำเร็จ: ${err.message}`)}
+                  appearance={{
+                    container: "border-2 border-dashed border-blue-200 hover:border-blue-400 bg-blue-50/30 rounded-xl p-4 transition-all cursor-pointer",
+                    uploadIcon: "text-blue-500 w-8 h-8",
+                    label: "text-xs font-semibold text-gray-700 hover:text-blue-600 mt-1",
+                    allowedContent: "text-[11px] text-gray-400 mt-0.5",
+                    button: "bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-4 py-2 rounded-lg shadow-xs mt-2",
+                  }}
+                  content={{
+                    uploadIcon: <QrCode className="w-8 h-8 text-blue-500 mb-1" />,
+                    label({ isDragActive }) {
+                      return isDragActive
+                        ? "วางรูป QR Code ที่นี่"
+                        : "ลากรูป QR Code มาวาง หรือคลิกเพื่อเลือกรูป";
+                    },
+                    allowedContent: "JPG, PNG สูงสุด 4MB",
+                    button({ ready, isUploading }) {
+                      if (isUploading) return "กำลังอัปโหลด...";
+                      return ready ? "อัปโหลด QR Code" : "กำลังโหลด...";
+                    },
+                  }}
+                />
+              </div>
+            )}
           </div>
 
           {/* Summary card */}

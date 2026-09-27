@@ -13,6 +13,16 @@ export const ourFileRouter = {
       console.log("Slip uploaded:", file.url);
       return { url: file.url };
     }),
+
+  // อัปโหลด QR Code สำหรับรับเงิน (รับไฟล์ภาพสูงสุด 4MB)
+  qrUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
+    .middleware(async () => {
+      return { uploadedAt: new Date().toISOString() };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("QR uploaded:", file.url);
+      return { url: file.url };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

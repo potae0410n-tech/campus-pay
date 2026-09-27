@@ -28,6 +28,7 @@ model Announcement {
   amount      Float
   bankAccount String
   bankName    String
+  qrCodeUrl   String?
   startDate   DateTime
   dueDate     DateTime
   createdAt   DateTime  @default(now())

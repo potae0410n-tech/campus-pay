@@ -12,6 +12,7 @@ export async function createAnnouncement(data: {
   bankName: string;
   startDate: string;
   dueDate: string;
+  qrCodeUrl?: string;
 }) {
   try {
     const announcement = await prisma.announcement.create({
@@ -21,6 +22,7 @@ export async function createAnnouncement(data: {
         amount: data.amount,
         bankAccount: data.bankAccount,
         bankName: data.bankName,
+        qrCodeUrl: data.qrCodeUrl || null,
         startDate: new Date(data.startDate),
         dueDate: new Date(data.dueDate),
       },
@@ -274,6 +276,22 @@ export async function updateGeneralFund(data: { generalBalance?: number; classFu
     }
     revalidatePath("/admin/dashboard");
     return { success: true, fund };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+// ---- ADMIN: อัปเดต QR Code ของประกาศ ----
+export async function updateAnnouncementQr(announcementId: string, qrCodeUrl: string) {
+  try {
+    const updated = await prisma.announcement.update({
+      where: { id: announcementId },
+      data: { qrCodeUrl },
+    });
+    revalidatePath("/admin/announcements");
+    revalidatePath(`/admin/announcements/${announcementId}`);
+    revalidatePath(`/student/announcements/${announcementId}`);
+    return { success: true, announcement: updated };
   } catch (error: any) {
     return { success: false, error: error.message };
   }

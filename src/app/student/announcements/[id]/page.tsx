@@ -9,7 +9,7 @@ import {
   Loader2, Landmark, AlertCircle, CalendarDays, UploadCloud, Users,
   ImageIcon, ExternalLink, QrCode, Copy, Check
 } from "lucide-react";
-import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
 import generatePayload from "promptpay-qr";
 import { QRCodeSVG } from "qrcode.react";
 
@@ -142,7 +142,18 @@ export default function StudentAnnouncementDetailPage() {
             </div>
 
             <div className="p-6 text-center flex flex-col items-center">
-              {qrPayload ? (
+              {ann.qrCodeUrl ? (
+                <div className="bg-white p-3 rounded-2xl shadow-inner border border-gray-100 flex flex-col items-center mb-4">
+                  <img
+                    src={ann.qrCodeUrl}
+                    alt="QR Code สำหรับชำระเงิน"
+                    className="w-52 h-52 object-contain rounded-xl border border-gray-200 bg-white"
+                  />
+                  <p className="mt-2.5 text-xs font-semibold text-gray-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+                    ยอดชำระ: ฿{ann.amount.toFixed(2)}
+                  </p>
+                </div>
+              ) : qrPayload ? (
                 <div className="bg-white p-4 rounded-2xl shadow-inner border border-gray-100 flex flex-col items-center mb-4">
                   <QRCodeSVG value={qrPayload} size={190} level="M" />
                   <p className="mt-3 text-xs font-semibold text-gray-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
@@ -246,14 +257,12 @@ export default function StudentAnnouncementDetailPage() {
           ) : (
             <div className="space-y-4">
               <p className="text-sm text-gray-500">
-                ถ่ายรูปหรือเลือกไฟล์สลิปโอนเงินจากกล้อง/คลังภาพ แล้วกดอัปโหลดได้เลยครับ
+                ลากรูปภาพสลิปมาวาง หรือกดเลือกไฟล์จากโทรศัพท์/คอมพิวเตอร์ได้เลยครับ
               </p>
 
-              {/* Uploadthing Upload Button */}
-              <div className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-200 rounded-xl bg-gray-50 p-6 hover:border-blue-300 transition-colors">
-                <UploadCloud className="w-10 h-10 text-gray-300 mb-3" />
-                <p className="text-sm text-gray-500 mb-4">เลือกหรือถ่ายรูปสลิปโอนเงิน</p>
-                <UploadButton
+              {/* Upload Dropzone (รองรับลากและวางรูปสลิป) */}
+              <div className="w-full">
+                <UploadDropzone
                   endpoint="slipUploader"
                   onClientUploadComplete={async (res) => {
                     if (res && res[0] && myPayment) {
@@ -266,20 +275,30 @@ export default function StudentAnnouncementDetailPage() {
                     alert(`อัปโหลดไม่สำเร็จ: ${error.message}`);
                   }}
                   appearance={{
-                    button: "bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition-all shadow-sm hover:shadow-md",
+                    container: "border-2 border-dashed border-blue-200 hover:border-blue-500 bg-blue-50/30 rounded-2xl p-6 transition-all cursor-pointer flex flex-col items-center justify-center min-h-[190px]",
+                    uploadIcon: "text-blue-500 w-12 h-12 mb-2",
+                    label: "text-sm font-semibold text-gray-700 hover:text-blue-600 mt-2 text-center",
                     allowedContent: "text-xs text-gray-400 mt-1",
+                    button: "bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-xl shadow-sm mt-3 transition-all",
                   }}
                   content={{
-                    button({ ready }) {
-                      return ready ? "📎 เลือกรูปสลิป" : "กำลังโหลด...";
+                    uploadIcon: <UploadCloud className="w-12 h-12 text-blue-500 mb-2" />,
+                    label({ isDragActive }) {
+                      return isDragActive
+                        ? "วางรูปสลิปที่นี่เลย!"
+                        : "ลากรูปสลิปมาวางที่นี่ หรือคลิกเพื่อเลือกไฟล์";
                     },
                     allowedContent: "JPG, PNG สูงสุด 4MB",
+                    button({ ready, isUploading }) {
+                      if (isUploading) return "กำลังอัปโหลดสลิป...";
+                      return ready ? "📎 เลือกหรืออัปโหลดสลิป" : "กำลังโหลด...";
+                    },
                   }}
                 />
               </div>
 
               <p className="text-xs text-gray-400 text-center">
-                * รองรับไฟล์ JPG, PNG ขนาดไม่เกิน 4MB
+                * รองรับการลากไฟล์รูปภาพมาวาง หรือคลิกเพื่อเลือกไฟล์ (JPG, PNG ขนาดไม่เกิน 4MB)
               </p>
             </div>
           )}
