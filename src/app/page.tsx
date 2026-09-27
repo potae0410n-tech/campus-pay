@@ -77,6 +77,10 @@ export default function LoginPage() {
       setRegError("รหัสนักศึกษาไม่ตรงกัน");
       return;
     }
+    if (!/^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]+$/.test(regPassword)) {
+      setRegError("รหัสผ่านต้องเป็นภาษาอังกฤษหรือตัวเลขเท่านั้น ห้ามใช้ภาษาไทย");
+      return;
+    }
     if (regPassword !== regConfirmPassword) {
       setRegError("รหัสผ่านไม่ตรงกัน");
       return;
@@ -342,7 +346,7 @@ export default function LoginPage() {
 
               {/* Confirm Student ID */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">ยืนยันรหัสอีกครั้ง</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">ยืนยันรหัสนักศึกษาอีกครั้ง</label>
                 <input
                   type="text"
                   required
@@ -368,8 +372,12 @@ export default function LoginPage() {
                   <input
                     type={showRegPw ? "text" : "password"}
                     required
-                    className="w-full px-4 py-2.5 pr-12 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                    placeholder="ตั้งรหัสผ่านของคุณ"
+                    className={`w-full px-4 py-2.5 pr-12 rounded-lg border text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                      regPassword && /[\u0E00-\u0E7F]/.test(regPassword)
+                        ? "border-red-300 bg-red-50"
+                        : "border-gray-300"
+                    }`}
+                    placeholder="ภาษาอังกฤษหรือตัวเลขเท่านั้น เช่น Pass1234"
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
                   />
@@ -381,6 +389,10 @@ export default function LoginPage() {
                     {showRegPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
+                {regPassword && /[\u0E00-\u0E7F]/.test(regPassword) && (
+                  <p className="text-xs text-red-500 mt-1">⚠️ รหัสผ่านต้องเป็นภาษาอังกฤษหรือตัวเลขเท่านั้น</p>
+                )}
+                <p className="text-xs text-gray-400 mt-1">ใช้ตัวอักษรภาษาอังกฤษ (A-Z, a-z), ตัวเลข (0-9) หรือสัญลักษณ์เท่านั้น</p>
               </div>
 
               {/* Confirm Password */}
