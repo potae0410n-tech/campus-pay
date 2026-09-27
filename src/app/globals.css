@@ -12,15 +12,29 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ===== Input placeholder ให้มองเห็นชัดขึ้น ===== */
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af; /* gray-400 — เข้มกว่า default มาก */
+  opacity: 1;
+}
+
+/* ===== Input text color ===== */
+input,
+textarea,
+select {
+  color: #111827; /* gray-900 — ตัวอักษรที่พิมพ์ชัดเจน */
+}
+
+/* ===== Input focus ring ===== */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
 }

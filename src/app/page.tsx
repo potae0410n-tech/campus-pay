@@ -174,7 +174,7 @@ export default function LoginPage() {
                 <input
                   type="text"
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors outline-none"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors outline-none"
                   placeholder="เช่น 650000000000 หรือ somchai_123"
                   value={loginId}
                   onChange={(e) => setLoginId(e.target.value)}
@@ -190,7 +190,7 @@ export default function LoginPage() {
                   <input
                     type={showLoginPw ? "text" : "password"}
                     required
-                    className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors outline-none"
+                    className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors outline-none"
                     placeholder="••••••••"
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
@@ -290,7 +290,7 @@ export default function LoginPage() {
                 <input
                   type="text"
                   required
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                   placeholder="เช่น somchai_123"
                   value={regUsername}
                   onChange={(e) => setRegUsername(e.target.value)}
@@ -304,7 +304,7 @@ export default function LoginPage() {
                   <input
                     type="text"
                     required
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                     placeholder="สมชาย"
                     value={regFirstName}
                     onChange={(e) => setRegFirstName(e.target.value)}
@@ -315,7 +315,7 @@ export default function LoginPage() {
                   <input
                     type="text"
                     required
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                     placeholder="ใจดี"
                     value={regLastName}
                     onChange={(e) => setRegLastName(e.target.value)}
@@ -332,7 +332,7 @@ export default function LoginPage() {
                   type="text"
                   required
                   maxLength={12}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                   placeholder="เช่น 256700000123"
                   value={regStudentId}
                   onChange={(e) => setRegStudentId(e.target.value.replace(/\D/g, ""))}
@@ -368,7 +368,7 @@ export default function LoginPage() {
                   <input
                     type={showRegPw ? "text" : "password"}
                     required
-                    className="w-full px-4 py-2.5 pr-12 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                    className="w-full px-4 py-2.5 pr-12 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                     placeholder="ตั้งรหัสผ่านของคุณ"
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
