@@ -6,8 +6,10 @@ import { getAnnouncementById, uploadSlip } from "@/actions/announcement";
 import { useViewMode } from "@/context/ViewModeContext";
 import {
   ArrowLeft, CreditCard, CheckCircle2, Clock, FileText,
-  Loader2, Landmark, AlertCircle, CalendarDays, UploadCloud, Users
+  Loader2, Landmark, AlertCircle, CalendarDays, UploadCloud, Users,
+  ImageIcon, ExternalLink
 } from "lucide-react";
+import { UploadButton } from "@/lib/uploadthing";
 
 export default function StudentAnnouncementDetailPage() {
   const params = useParams();
@@ -18,8 +20,7 @@ export default function StudentAnnouncementDetailPage() {
   const [ann, setAnn] = useState<any>(null);
   const [myPayment, setMyPayment] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [file, setFile] = useState<File | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -43,21 +44,6 @@ export default function StudentAnnouncementDetailPage() {
   const daysLeft = ann
     ? Math.ceil((new Date(ann.dueDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
     : 0;
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) setFile(e.target.files[0]);
-  };
-
-  const handleUpload = async () => {
-    if (!file || !myPayment) return;
-    setIsUploading(true);
-    // prototype: simulate upload URL
-    const fakeUrl = `https://example.com/slips/${file.name}`;
-    await uploadSlip(myPayment.id, fakeUrl);
-    await fetchData();
-    setFile(null);
-    setIsUploading(false);
-  };
 
   if (isLoading) return (
     <div className="flex items-center justify-center min-h-[60vh]">
@@ -84,7 +70,7 @@ export default function StudentAnnouncementDetailPage() {
       </button>
 
       {/* Hero Banner */}
-      <div className={`bg-gradient-to-br ${statusColor} rounded-2xl p-8 text-white relative overflow-hidden`}>
+      <div className={`bg-gradient-to-br ${statusColor} rounded-2xl p-6 md:p-8 text-white relative overflow-hidden`}>
         <div className="absolute top-0 right-0 w-72 h-72 bg-white opacity-5 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
         <div className="relative z-10">
           <div className="inline-flex items-center gap-1.5 bg-white/20 px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm mb-4">
@@ -98,23 +84,23 @@ export default function StudentAnnouncementDetailPage() {
               <><Clock className="w-3.5 h-3.5" /> เหลือ {daysLeft} วัน</>
             )}
           </div>
-          <h1 className="text-3xl font-bold mb-2">{ann.title}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">{ann.title}</h1>
           {ann.description && (
             <p className="text-blue-100 mb-6 max-w-xl text-sm leading-relaxed">{ann.description}</p>
           )}
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="bg-white/10 backdrop-blur-sm px-5 py-3 rounded-xl">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="bg-white/10 backdrop-blur-sm px-4 py-3 rounded-xl">
               <p className="text-xs text-blue-200 mb-0.5">ยอดที่ต้องชำระ</p>
               <p className="text-2xl font-bold">฿{ann.amount.toFixed(2)}</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm px-5 py-3 rounded-xl">
+            <div className="bg-white/10 backdrop-blur-sm px-4 py-3 rounded-xl">
               <p className="text-xs text-blue-200 mb-0.5">บัญชีที่ต้องโอน</p>
               <p className="font-semibold">{ann.bankAccount}</p>
               <p className="text-xs text-blue-200">{ann.bankName}</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm px-5 py-3 rounded-xl">
+            <div className="bg-white/10 backdrop-blur-sm px-4 py-3 rounded-xl">
               <p className="text-xs text-blue-200 mb-0.5">กำหนดชำระ</p>
-              <p className="font-semibold">{formatDate(ann.startDate)}</p>
+              <p className="font-semibold text-sm">{formatDate(ann.startDate)}</p>
               <p className="text-xs text-blue-200">ถึง {formatDate(ann.dueDate)}</p>
             </div>
           </div>
@@ -134,48 +120,92 @@ export default function StudentAnnouncementDetailPage() {
               <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-3" />
               <h3 className="font-bold text-green-800 mb-1">ชำระเงินครบถ้วนแล้ว!</h3>
               <p className="text-xs text-green-600">เหรัญญิกยืนยันการชำระเงินของคุณแล้ว</p>
+              {myPayment?.slipUrl && (
+                <a
+                  href={myPayment.slipUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 mt-4 text-xs text-green-700 hover:text-green-900 underline"
+                >
+                  <ImageIcon className="w-3.5 h-3.5" /> ดูสลิปที่ส่งไป
+                </a>
+              )}
             </div>
           ) : myPayment?.status === "PENDING" ? (
-            <div className="text-center py-10 border-2 border-dashed border-yellow-200 bg-yellow-50 rounded-xl">
-              <Clock className="w-12 h-12 text-yellow-500 mx-auto mb-3" />
-              <h3 className="font-bold text-yellow-800 mb-1">อยู่ระหว่างการตรวจสอบ</h3>
-              <p className="text-xs text-yellow-600">รอเหรัญญิกตรวจสอบสลิปของคุณ</p>
+            <div className="space-y-4">
+              <div className="text-center py-8 border-2 border-dashed border-yellow-200 bg-yellow-50 rounded-xl">
+                <Clock className="w-12 h-12 text-yellow-500 mx-auto mb-3" />
+                <h3 className="font-bold text-yellow-800 mb-1">อยู่ระหว่างการตรวจสอบ</h3>
+                <p className="text-xs text-yellow-600">รอเหรัญญิกตรวจสอบสลิปของคุณ</p>
+              </div>
+              {myPayment?.slipUrl && (
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                  <p className="text-xs text-gray-500 mb-2 font-medium">สลิปที่คุณส่ง:</p>
+                  <div className="relative">
+                    <img
+                      src={myPayment.slipUrl}
+                      alt="สลิปโอนเงิน"
+                      className="w-full rounded-lg object-contain max-h-48 border border-gray-200"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                    <a
+                      href={myPayment.slipUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-lg shadow text-gray-600 hover:text-blue-600"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : uploadSuccess ? (
+            <div className="text-center py-10 border-2 border-dashed border-blue-200 bg-blue-50 rounded-xl">
+              <CheckCircle2 className="w-12 h-12 text-blue-500 mx-auto mb-3" />
+              <h3 className="font-bold text-blue-800 mb-1">ส่งสลิปเรียบร้อย!</h3>
+              <p className="text-xs text-blue-600">รอเหรัญญิกตรวจสอบสักครู่นะครับ</p>
             </div>
           ) : (
             <div className="space-y-4">
-              <label
-                htmlFor="slip-upload"
-                className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-blue-300 transition-all"
-              >
-                <UploadCloud className="w-8 h-8 text-gray-300 mb-2" />
-                {file ? (
-                  <p className="font-medium text-blue-600 text-sm px-4 text-center truncate max-w-full">{file.name}</p>
-                ) : (
-                  <>
-                    <p className="text-sm text-blue-600 font-semibold">คลิกเพื่ออัปโหลดสลิป</p>
-                    <p className="text-xs text-gray-400 mt-1">รองรับ JPG, PNG</p>
-                  </>
-                )}
-                <input id="slip-upload" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-              </label>
+              <p className="text-sm text-gray-500">
+                ถ่ายรูปหรือเลือกไฟล์สลิปโอนเงินจากกล้อง/คลังภาพ แล้วกดอัปโหลดได้เลยครับ
+              </p>
 
-              <button
-                disabled={!file || isUploading}
-                onClick={handleUpload}
-                className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${
-                  file && !isUploading
-                    ? "bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-md"
-                    : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                }`}
-              >
-                {isUploading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" /> กำลังส่งสลิป...
-                  </span>
-                ) : (
-                  "ยืนยันการส่งสลิป"
-                )}
-              </button>
+              {/* Uploadthing Upload Button */}
+              <div className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-200 rounded-xl bg-gray-50 p-6 hover:border-blue-300 transition-colors">
+                <UploadCloud className="w-10 h-10 text-gray-300 mb-3" />
+                <p className="text-sm text-gray-500 mb-4">เลือกหรือถ่ายรูปสลิปโอนเงิน</p>
+                <UploadButton
+                  endpoint="slipUploader"
+                  onClientUploadComplete={async (res) => {
+                    if (res && res[0] && myPayment) {
+                      await uploadSlip(myPayment.id, res[0].url);
+                      setUploadSuccess(true);
+                      await fetchData();
+                    }
+                  }}
+                  onUploadError={(error: Error) => {
+                    alert(`อัปโหลดไม่สำเร็จ: ${error.message}`);
+                  }}
+                  appearance={{
+                    button: "bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition-all shadow-sm hover:shadow-md",
+                    allowedContent: "text-xs text-gray-400 mt-1",
+                  }}
+                  content={{
+                    button({ ready }) {
+                      return ready ? "📎 เลือกรูปสลิป" : "กำลังโหลด...";
+                    },
+                    allowedContent: "JPG, PNG สูงสุด 4MB",
+                  }}
+                />
+              </div>
+
+              <p className="text-xs text-gray-400 text-center">
+                * รองรับไฟล์ JPG, PNG ขนาดไม่เกิน 4MB
+              </p>
             </div>
           )}
         </div>

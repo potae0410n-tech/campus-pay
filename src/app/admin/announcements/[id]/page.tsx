@@ -181,32 +181,58 @@ export default function AdminAnnouncementDetailPage() {
                       </td>
                       <td className="p-4 text-center">
                         {payment.status === "PENDING" ? (
-                          <div className="flex items-center justify-center gap-2">
+                          <div className="flex flex-col items-center gap-2">
+                            {/* Slip thumbnail */}
                             {payment.slipUrl && (
                               <a
                                 href={payment.slipUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                                className="block"
+                                title="คลิกเพื่อดูสลิปขนาดเต็ม"
                               >
-                                <ExternalLink className="w-3 h-3" /> ดูสลิป
+                                <img
+                                  src={payment.slipUrl}
+                                  alt="สลิปโอนเงิน"
+                                  className="w-14 h-14 object-cover rounded-lg border border-gray-200 hover:scale-110 transition-transform shadow-sm"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).style.display = "none";
+                                  }}
+                                />
                               </a>
                             )}
-                            <button
-                              disabled={reviewing === payment.id}
-                              onClick={() => handleReview(payment.id, "APPROVED")}
-                              className="px-2 py-1 rounded-md text-xs font-medium bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
-                            >
-                              {reviewing === payment.id ? "..." : "อนุมัติ"}
-                            </button>
-                            <button
-                              disabled={reviewing === payment.id}
-                              onClick={() => handleReview(payment.id, "REJECTED")}
-                              className="px-2 py-1 rounded-md text-xs font-medium bg-red-100 text-red-700 hover:bg-red-200 transition-colors disabled:opacity-50"
-                            >
-                              ปฏิเสธ
-                            </button>
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                disabled={reviewing === payment.id}
+                                onClick={() => handleReview(payment.id, "APPROVED")}
+                                className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
+                              >
+                                {reviewing === payment.id ? "..." : "✓ อนุมัติ"}
+                              </button>
+                              <button
+                                disabled={reviewing === payment.id}
+                                onClick={() => handleReview(payment.id, "REJECTED")}
+                                className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-red-100 text-red-700 hover:bg-red-200 transition-colors disabled:opacity-50"
+                              >
+                                ✗ ปฏิเสธ
+                              </button>
+                            </div>
                           </div>
+                        ) : payment.status === "APPROVED" && payment.slipUrl ? (
+                          <a
+                            href={payment.slipUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <img
+                              src={payment.slipUrl}
+                              alt="สลิปโอนเงิน"
+                              className="w-10 h-10 object-cover rounded-lg border border-gray-200 mx-auto hover:scale-110 transition-transform"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = "none";
+                              }}
+                            />
+                          </a>
                         ) : (
                           <span className="text-xs text-gray-400">-</span>
                         )}
