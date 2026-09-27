@@ -7,9 +7,11 @@ import { useViewMode } from "@/context/ViewModeContext";
 import {
   ArrowLeft, CreditCard, CheckCircle2, Clock, FileText,
   Loader2, Landmark, AlertCircle, CalendarDays, UploadCloud, Users,
-  ImageIcon, ExternalLink
+  ImageIcon, ExternalLink, QrCode, Copy, Check
 } from "lucide-react";
 import { UploadButton } from "@/lib/uploadthing";
+import generatePayload from "promptpay-qr";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function StudentAnnouncementDetailPage() {
   const params = useParams();
@@ -21,6 +23,13 @@ export default function StudentAnnouncementDetailPage() {
   const [myPayment, setMyPayment] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyAccount = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -58,6 +67,17 @@ export default function StudentAnnouncementDetailPage() {
     : isOverdue
     ? "from-red-600 to-red-500"
     : "from-blue-700 to-blue-500";
+
+  const cleanAccount = ann?.bankAccount ? ann.bankAccount.replace(/[^0-9]/g, "") : "";
+  const isValidPromptPay = cleanAccount.length === 10 || cleanAccount.length === 13;
+  let qrPayload = "";
+  if (isValidPromptPay && ann?.amount) {
+    try {
+      qrPayload = generatePayload(cleanAccount, { amount: Number(ann.amount) });
+    } catch (e) {
+      console.error("PromptPay QR generation error:", e);
+    }
+  }
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-12">
@@ -108,12 +128,66 @@ export default function StudentAnnouncementDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Upload Section */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <h2 className="font-bold text-gray-900 mb-4 pb-3 border-b flex items-center gap-2">
-            <UploadCloud className="w-5 h-5 text-blue-500" />
-            อัปโหลดหลักฐานการชำระเงิน
-          </h2>
+        {/* Left Side: PromptPay QR Code & Account Info */}
+        <div className="space-y-6">
+          {/* PromptPay Card */}
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-[#003B70] px-5 py-3.5 flex items-center justify-between text-white">
+              <div className="flex items-center gap-2 font-bold text-sm">
+                <QrCode className="w-5 h-5 text-sky-300" />
+                <span>สแกนจ่ายผ่าน PromptPay</span>
+              </div>
+              <span className="text-[11px] bg-white/20 px-2 py-0.5 rounded-full font-medium">พร้อมเพย์</span>
+            </div>
+
+            <div className="p-6 text-center flex flex-col items-center">
+              {qrPayload ? (
+                <div className="bg-white p-4 rounded-2xl shadow-inner border border-gray-100 flex flex-col items-center mb-4">
+                  <QRCodeSVG value={qrPayload} size={190} level="M" />
+                  <p className="mt-3 text-xs font-semibold text-gray-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+                    ยอดชำระ: ฿{ann.amount.toFixed(2)}
+                  </p>
+                </div>
+              ) : (
+                <div className="w-48 h-48 bg-gray-100 rounded-2xl flex flex-col items-center justify-center text-gray-400 mb-4 border border-dashed border-gray-300">
+                  <Landmark className="w-10 h-10 mb-2 text-gray-300" />
+                  <p className="text-xs">โอนผ่านเลขบัญชีด้านล่าง</p>
+                </div>
+              )}
+
+              {/* Bank Account Details + Copy */}
+              <div className="w-full bg-gray-50 rounded-xl p-3.5 border border-gray-200 flex items-center justify-between gap-3">
+                <div className="text-left">
+                  <p className="text-[11px] text-gray-500 font-medium">เลขบัญชี / เบอร์พร้อมเพย์</p>
+                  <p className="font-bold text-gray-900 text-sm tracking-wide">{ann.bankAccount}</p>
+                  <p className="text-xs text-gray-600">{ann.bankName}</p>
+                </div>
+                <button
+                  onClick={() => handleCopyAccount(ann.bankAccount)}
+                  className="flex items-center gap-1.5 bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-xs"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-green-600" />
+                      <span className="text-green-600">คัดลอกแล้ว</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 text-gray-500" />
+                      <span>คัดลอก</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Upload Section */}
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <h2 className="font-bold text-gray-900 mb-4 pb-3 border-b flex items-center gap-2">
+              <UploadCloud className="w-5 h-5 text-blue-500" />
+              อัปโหลดหลักฐานการชำระเงิน
+            </h2>
 
           {myPayment?.status === "APPROVED" ? (
             <div className="text-center py-10 border-2 border-dashed border-green-200 bg-green-50 rounded-xl">
@@ -209,6 +283,7 @@ export default function StudentAnnouncementDetailPage() {
             </div>
           )}
         </div>
+      </div>
 
         {/* รายชื่อเพื่อนในประกาศ */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
