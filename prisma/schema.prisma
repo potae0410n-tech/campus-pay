@@ -42,6 +42,7 @@ model Payment {
   announcementId String
   slipUrl        String?
   status         String       @default("UNPAID") // "UNPAID", "PENDING", "APPROVED", "REJECTED"
+  rejectReason   String?      // เหตุผลที่เหรัญญิกปฏิเสธสลิป
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 

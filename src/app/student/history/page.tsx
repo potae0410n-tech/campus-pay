@@ -291,8 +291,16 @@ export default function StudentHistoryPage() {
                         )}
                         {p.status === "REJECTED" && (
                           <span className="text-xs text-red-600 bg-red-50 border border-red-200 px-2.5 py-1.5 rounded-lg">
-                            ❌ สลิปไม่ผ่าน — กรุณาส่งใหม่
+                            ❌ สลิปไม่ผ่าน{p.rejectReason ? ` — ${p.rejectReason}` : ""}
                           </span>
+                        )}
+                        {p.status === "REJECTED" && (
+                          <button
+                            onClick={() => router.push(`/student/announcements/${p.announcement.id}`)}
+                            className="inline-flex items-center gap-1.5 text-xs text-blue-600 font-semibold hover:text-blue-800"
+                          >
+                            ส่งสลิปใหม่ <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
                         )}
                       </div>
                     </div>

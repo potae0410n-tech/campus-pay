@@ -218,7 +218,14 @@ export default function AdminHistoryPage() {
                       <td className="p-4 text-sm font-semibold text-gray-900 text-right whitespace-nowrap">
                         ฿{p.announcement.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                       </td>
-                      <td className="p-4 text-center"><StatusBadge status={p.status} /></td>
+                      <td className="p-4 text-center">
+                        <StatusBadge status={p.status} />
+                        {p.status === "REJECTED" && p.rejectReason && (
+                          <p className="text-[11px] text-red-500 mt-1 max-w-[160px] mx-auto break-words">
+                            {p.rejectReason}
+                          </p>
+                        )}
+                      </td>
                       <td className="p-4 text-xs text-gray-500 whitespace-nowrap">
                         {p.status === "UNPAID" ? "-" : formatDateTime(p.updatedAt)}
                       </td>

@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 import { setSessionCookie, clearSessionCookie } from "@/lib/auth";
 
-const ADMIN_SECRET_CODE = "iloveIT2568"; // รหัสลับสำหรับสมัครแอดมิน
+// รหัสลับสำหรับสมัครแอดมิน — อ่านจาก env (ADMIN_SECRET_CODE) ไม่เก็บในโค้ด
 
 // ---- ล็อกอิน ----
 export async function loginUser(identifier: string, password: string) {
@@ -69,7 +69,11 @@ export async function registerUser(data: {
   try {
     // ตรวจสอบรหัสแอดมิน
     if (data.role === "ADMIN") {
-      if (!data.adminCode || data.adminCode !== ADMIN_SECRET_CODE) {
+      const adminSecret = process.env.ADMIN_SECRET_CODE;
+      if (!adminSecret) {
+        return { success: false, error: "ระบบยังไม่ได้ตั้งค่ารหัสสมัครแอดมิน" };
+      }
+      if (!data.adminCode || data.adminCode !== adminSecret) {
         return { success: false, error: "รหัสยืนยันแอดมินไม่ถูกต้อง" };
       }
     }

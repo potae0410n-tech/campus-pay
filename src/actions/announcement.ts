@@ -127,6 +127,7 @@ export async function getAnnouncementById(id: string) {
         ...p,
         isMe,
         slipUrl: isMe ? p.slipUrl : null,
+        rejectReason: isMe ? p.rejectReason : null,
         user: {
           ...p.user,
           id: isMe ? p.user.id : "",
@@ -187,6 +188,7 @@ export async function uploadSlip(paymentId: string, slipUrl: string) {
       data: {
         slipUrl,
         status: "PENDING",
+        rejectReason: null,
       },
     });
 
@@ -201,7 +203,11 @@ export async function uploadSlip(paymentId: string, slipUrl: string) {
 }
 
 // ---- ADMIN: อนุมัติ/ปฏิเสธ สลิป ----
-export async function reviewPayment(paymentId: string, action: "APPROVED" | "REJECTED") {
+export async function reviewPayment(
+  paymentId: string,
+  action: "APPROVED" | "REJECTED",
+  reason?: string
+) {
   try {
     await requireAdmin();
 
@@ -209,9 +215,11 @@ export async function reviewPayment(paymentId: string, action: "APPROVED" | "REJ
       return { success: false, error: "การดำเนินการไม่ถูกต้อง" };
     }
 
+    const cleanReason = action === "REJECTED" ? (reason || "").trim().slice(0, 300) || null : null;
+
     const payment = await prisma.payment.update({
       where: { id: paymentId },
-      data: { status: action },
+      data: { status: action, rejectReason: cleanReason },
     });
 
     revalidatePath("/admin/announcements");

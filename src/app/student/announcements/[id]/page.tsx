@@ -93,7 +93,7 @@ export default function StudentAnnouncementDetailPage() {
 
   const statusColor = myPayment?.status === "APPROVED"
     ? "from-green-600 to-green-500"
-    : isOverdue
+    : myPayment?.status === "REJECTED" || isOverdue
     ? "from-red-600 to-red-500"
     : "from-blue-700 to-blue-500";
 
@@ -127,6 +127,8 @@ export default function StudentAnnouncementDetailPage() {
               <><CheckCircle2 className="w-3.5 h-3.5" /> ชำระแล้ว</>
             ) : myPayment?.status === "PENDING" ? (
               <><Clock className="w-3.5 h-3.5" /> รอเหรัญญิกตรวจสอบ</>
+            ) : myPayment?.status === "REJECTED" ? (
+              <><AlertCircle className="w-3.5 h-3.5" /> สลิปไม่ผ่าน กรุณาส่งใหม่</>
             ) : isOverdue ? (
               <><AlertCircle className="w-3.5 h-3.5" /> เกินกำหนดชำระ</>
             ) : (
@@ -363,6 +365,18 @@ export default function StudentAnnouncementDetailPage() {
             </div>
           ) : (
             <div className="space-y-4">
+              {myPayment?.status === "REJECTED" && (
+                <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4">
+                  <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-red-800">สลิปของคุณไม่ผ่านการตรวจสอบ</p>
+                    <p className="text-sm text-red-700 mt-1 break-words">
+                      เหตุผล: {myPayment.rejectReason || "ไม่ได้ระบุเหตุผล กรุณาติดต่อเหรัญญิก"}
+                    </p>
+                    <p className="text-xs text-red-600 mt-1">กรุณาอัปโหลดสลิปใหม่อีกครั้งด้านล่าง</p>
+                  </div>
+                </div>
+              )}
               <p className="text-sm text-gray-500">
                 ลากรูปภาพสลิปมาวาง หรือคลิกเลือกไฟล์เพื่ออัปโหลดได้ทันทีครับ
               </p>

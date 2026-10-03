@@ -9,6 +9,13 @@ import {
 } from "lucide-react";
 import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
 
+const REJECT_REASONS = [
+  "ยอดเงินไม่ตรง",
+  "สลิปไม่ชัด/อ่านไม่ออก",
+  "โอนผิดบัญชี",
+  "สลิปซ้ำ/เคยใช้แล้ว",
+];
+
 export default function AdminAnnouncementDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -17,6 +24,8 @@ export default function AdminAnnouncementDetailPage() {
   const [ann, setAnn] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [reviewing, setReviewing] = useState<string | null>(null);
+  const [rejectTarget, setRejectTarget] = useState<any>(null);
+  const [rejectReason, setRejectReason] = useState("");
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -28,9 +37,14 @@ export default function AdminAnnouncementDetailPage() {
 
   useEffect(() => { if (id) fetchData(); }, [id]);
 
-  const handleReview = async (paymentId: string, action: "APPROVED" | "REJECTED") => {
+  const handleReview = async (
+    paymentId: string,
+    action: "APPROVED" | "REJECTED",
+    reason?: string
+  ) => {
     setReviewing(paymentId);
-    await reviewPayment(paymentId, action);
+    const res = await reviewPayment(paymentId, action, reason);
+    if (!res.success) alert(res.error || "ดำเนินการไม่สำเร็จ");
     await fetchData();
     setReviewing(null);
   };
@@ -304,7 +318,10 @@ export default function AdminAnnouncementDetailPage() {
                               </button>
                               <button
                                 disabled={reviewing === payment.id}
-                                onClick={() => handleReview(payment.id, "REJECTED")}
+                                onClick={() => {
+                                  setRejectReason("");
+                                  setRejectTarget(payment);
+                                }}
                                 className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-red-100 text-red-700 hover:bg-red-200 transition-colors disabled:opacity-50"
                               >
                                 ✗ ปฏิเสธ
@@ -338,6 +355,73 @@ export default function AdminAnnouncementDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Reject reason modal */}
+      {rejectTarget && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setRejectTarget(null)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="px-5 py-4 border-b border-gray-100 bg-red-50/60">
+              <h3 className="font-bold text-gray-900">ปฏิเสธสลิป</h3>
+              <p className="text-xs text-gray-500 mt-0.5">
+                {rejectTarget.user.firstName} {rejectTarget.user.lastName} — ระบบจะแจ้งเหตุผลให้นักศึกษาเห็น
+              </p>
+            </div>
+            <div className="p-5 space-y-3">
+              <div className="flex flex-wrap gap-2">
+                {REJECT_REASONS.map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRejectReason(r)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                      rejectReason === r
+                        ? "bg-red-600 text-white border-red-600"
+                        : "bg-white text-gray-600 border-gray-200 hover:border-red-300 hover:text-red-600"
+                    }`}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+              <textarea
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                rows={3}
+                maxLength={300}
+                placeholder="พิมพ์เหตุผลเพิ่มเติม (ไม่บังคับ)"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none resize-none"
+              />
+            </div>
+            <div className="px-5 py-3 border-t border-gray-100 bg-gray-50/60 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setRejectTarget(null)}
+                className="px-4 py-2 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 rounded-xl border border-gray-200"
+              >
+                ยกเลิก
+              </button>
+              <button
+                type="button"
+                disabled={reviewing === rejectTarget.id}
+                onClick={async () => {
+                  const target = rejectTarget;
+                  setRejectTarget(null);
+                  await handleReview(target.id, "REJECTED", rejectReason);
+                }}
+                className="px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl disabled:opacity-50"
+              >
+                ยืนยันปฏิเสธ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
