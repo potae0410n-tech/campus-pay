@@ -345,7 +345,7 @@ export default function StudentHistoryPage() {
                 className="w-full rounded-xl object-contain max-h-[60vh]"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src =
-                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f3f4f6'/%3E%3Ctext x='200' y='140' text-anchor='middle' fill='%239ca3af' font-size='14' font-family='sans-serif'%3Eไม่สามารถแสดงรูปภาพได้%3C/text%3E%3Ctext x='200' y='165' text-anchor='middle' fill='%239ca3af' font-size='12' font-family='sans-serif'%3E(ระบบ Prototype - URL สลิปจำลอง)%3C/text%3E%3C/svg%3E";
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f3f4f6'/%3E%3Ctext x='200' y='155' text-anchor='middle' fill='%239ca3af' font-size='14' font-family='sans-serif'%3Eไม่สามารถแสดงรูปภาพได้%3C/text%3E%3C/svg%3E";
                 }}
               />
               <p className="text-xs text-gray-400 text-center mt-3 break-all">{previewSlip}</p>

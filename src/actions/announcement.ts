@@ -325,6 +325,29 @@ export async function updateGeneralFund(data: { generalBalance?: number; classFu
   }
 }
 
+// ---- ADMIN: ประวัติการชำระเงินของนักศึกษาทุกคน ----
+export async function getAllPaymentHistory() {
+  try {
+    await requireAdmin();
+
+    const payments = await prisma.payment.findMany({
+      include: {
+        user: {
+          select: { id: true, firstName: true, lastName: true, studentId: true },
+        },
+        announcement: {
+          select: { id: true, title: true, amount: true, bankName: true, dueDate: true },
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+    });
+
+    return { success: true, payments };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
 // ---- ADMIN: อัปเดต QR Code ของประกาศ ----
 export async function updateAnnouncementQr(announcementId: string, qrCodeUrl: string) {
   try {

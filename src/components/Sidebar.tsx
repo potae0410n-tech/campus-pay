@@ -51,6 +51,7 @@ export default function Sidebar({ role }: SidebarProps) {
   const adminMenu = [
     { name: "ภาพรวม", href: "/admin/dashboard", icon: LayoutDashboard },
     { name: "ประกาศเก็บเงิน", href: "/admin/announcements", icon: FolderOpen },
+    { name: "ประวัติชำระเงิน", href: "/admin/history", icon: Clock },
   ];
 
   const studentMenu = [
