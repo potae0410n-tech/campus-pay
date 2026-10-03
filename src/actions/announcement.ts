@@ -2,6 +2,20 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { requireAdmin, requireUser } from "@/lib/auth";
+
+// อนุญาตเฉพาะ URL ที่มาจาก Uploadthing เท่านั้น (กันการแอบใส่ลิงก์ภายนอก)
+function isTrustedUploadUrl(url: string) {
+  try {
+    const u = new URL(url);
+    return (
+      u.protocol === "https:" &&
+      (u.hostname === "utfs.io" || u.hostname === "ufs.sh" || u.hostname.endsWith(".ufs.sh"))
+    );
+  } catch {
+    return false;
+  }
+}
 
 // ---- ADMIN: สร้างประกาศ ----
 export async function createAnnouncement(data: {
@@ -15,6 +29,12 @@ export async function createAnnouncement(data: {
   qrCodeUrl?: string;
 }) {
   try {
+    await requireAdmin();
+
+    if (data.qrCodeUrl && !isTrustedUploadUrl(data.qrCodeUrl)) {
+      return { success: false, error: "ลิงก์รูป QR Code ไม่ถูกต้อง" };
+    }
+
     const announcement = await prisma.announcement.create({
       data: {
         title: data.title,
@@ -56,6 +76,8 @@ export async function createAnnouncement(data: {
 // ---- ADMIN: ดูประกาศทั้งหมด ----
 export async function getAnnouncements() {
   try {
+    await requireAdmin();
+
     const announcements = await prisma.announcement.findMany({
       orderBy: { createdAt: "desc" },
       include: {
@@ -71,9 +93,12 @@ export async function getAnnouncements() {
   }
 }
 
-// ---- ADMIN: ดูรายละเอียดประกาศ + รายชื่อนักศึกษา ----
+// ---- ดูรายละเอียดประกาศ + รายชื่อนักศึกษา ----
+// แอดมิน: เห็นครบ | นักศึกษา: เห็นชื่อ+สถานะของเพื่อน แต่ไม่เห็นรหัสนักศึกษา/สลิปของคนอื่น
 export async function getAnnouncementById(id: string) {
   try {
+    const me = await requireUser();
+
     const announcement = await prisma.announcement.findUnique({
       where: { id },
       include: {
@@ -94,49 +119,40 @@ export async function getAnnouncementById(id: string) {
     });
 
     if (!announcement) return { success: false, error: "Not found" };
-    return { success: true, announcement };
+
+    const payments = announcement.payments.map((p) => {
+      const isMe = p.userId === me.id;
+      if (me.role === "ADMIN") return { ...p, isMe };
+      return {
+        ...p,
+        isMe,
+        slipUrl: isMe ? p.slipUrl : null,
+        user: {
+          ...p.user,
+          id: isMe ? p.user.id : "",
+          studentId: isMe ? p.user.studentId : "",
+        },
+      };
+    });
+
+    return { success: true, announcement: { ...announcement, payments } };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
 
-// ---- STUDENT: ดูประกาศที่ต้องชำระ ----
-export async function getMyAnnouncements(studentId: string = "650000000000") {
+// ---- STUDENT: ดูประกาศที่ต้องชำระ (ใช้ตัวตนจาก session เสมอ — พารามิเตอร์ถูกละเว้น) ----
+export async function getMyAnnouncements(_studentId?: string) {
   try {
-    // จำลอง: หา user ด้วย studentId (hardcoded สำหรับ prototype)
-    let user = await prisma.user.findFirst({
-      where: { studentId },
+    const me = await requireUser();
+
+    const user = await prisma.user.findUnique({
+      where: { id: me.id },
+      select: { id: true, firstName: true, lastName: true, studentId: true, username: true, role: true },
     });
 
-    if (!user) {
-      // สร้าง dummy student ถ้ายังไม่มี
-      user = await prisma.user.create({
-        data: {
-          username: "somchai123",
-          studentId: "650000000000",
-          firstName: "สมชาย",
-          lastName: "ใจดี",
-          password: "hashedpassword",
-          role: "STUDENT",
-        },
-      });
-
-      // สร้าง Payment records สำหรับทุกประกาศที่มีอยู่
-      const allAnnouncements = await prisma.announcement.findMany();
-      if (allAnnouncements.length > 0) {
-        await prisma.payment.createMany({
-          data: allAnnouncements.map((a) => ({
-            userId: user!.id,
-            announcementId: a.id,
-            status: "UNPAID",
-          })),
-          skipDuplicates: true,
-        });
-      }
-    }
-
     const payments = await prisma.payment.findMany({
-      where: { userId: user.id },
+      where: { userId: me.id },
       include: {
         announcement: true,
       },
@@ -149,9 +165,23 @@ export async function getMyAnnouncements(studentId: string = "650000000000") {
   }
 }
 
-// ---- STUDENT: อัปโหลดสลิป ----
+// ---- STUDENT: อัปโหลด/แก้ไขสลิป ----
 export async function uploadSlip(paymentId: string, slipUrl: string) {
   try {
+    const me = await requireUser();
+
+    if (!isTrustedUploadUrl(slipUrl)) {
+      return { success: false, error: "ลิงก์สลิปไม่ถูกต้อง" };
+    }
+
+    const existing = await prisma.payment.findUnique({ where: { id: paymentId } });
+    if (!existing || existing.userId !== me.id) {
+      return { success: false, error: "ไม่พบรายการชำระเงินของคุณ" };
+    }
+    if (existing.status === "APPROVED") {
+      return { success: false, error: "รายการนี้ได้รับการอนุมัติแล้ว ไม่สามารถแก้ไขสลิปได้" };
+    }
+
     const payment = await prisma.payment.update({
       where: { id: paymentId },
       data: {
@@ -162,6 +192,7 @@ export async function uploadSlip(paymentId: string, slipUrl: string) {
 
     revalidatePath("/student/dashboard");
     revalidatePath("/student/announcements");
+    revalidatePath("/admin/announcements");
 
     return { success: true, payment };
   } catch (error: any) {
@@ -172,12 +203,19 @@ export async function uploadSlip(paymentId: string, slipUrl: string) {
 // ---- ADMIN: อนุมัติ/ปฏิเสธ สลิป ----
 export async function reviewPayment(paymentId: string, action: "APPROVED" | "REJECTED") {
   try {
+    await requireAdmin();
+
+    if (action !== "APPROVED" && action !== "REJECTED") {
+      return { success: false, error: "การดำเนินการไม่ถูกต้อง" };
+    }
+
     const payment = await prisma.payment.update({
       where: { id: paymentId },
       data: { status: action },
     });
 
     revalidatePath("/admin/announcements");
+    revalidatePath("/student/dashboard");
     return { success: true, payment };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -187,6 +225,8 @@ export async function reviewPayment(paymentId: string, action: "APPROVED" | "REJ
 // ---- ADMIN: ดึงข้อมูล Dashboard ----
 export async function getAdminDashboardStats() {
   try {
+    await requireAdmin();
+
     const [studentCount, announcementCount, students, payments] = await Promise.all([
       prisma.user.count({ where: { role: "STUDENT" } }),
       prisma.announcement.count(),
@@ -224,17 +264,19 @@ export async function getAdminDashboardStats() {
   }
 }
 
-// ---- STUDENT: ดึงประวัติการชำระเงินทั้งหมด ----
-export async function getMyPaymentHistory(studentId: string = "650000000000") {
+// ---- STUDENT: ดึงประวัติการชำระเงินทั้งหมด (ใช้ตัวตนจาก session เสมอ) ----
+export async function getMyPaymentHistory(_studentId?: string) {
   try {
-    const user = await prisma.user.findFirst({
-      where: { studentId },
-    });
+    const me = await requireUser();
 
+    const user = await prisma.user.findUnique({
+      where: { id: me.id },
+      select: { id: true, firstName: true, lastName: true, studentId: true, username: true, role: true },
+    });
     if (!user) return { success: false, error: "ไม่พบนักศึกษา" };
 
     const payments = await prisma.payment.findMany({
-      where: { userId: user.id },
+      where: { userId: me.id },
       include: {
         announcement: {
           select: {
@@ -262,6 +304,8 @@ export async function getMyPaymentHistory(studentId: string = "650000000000") {
 // ---- ADMIN: อัปเดตยอดเงินกองกลาง / เงินรุ่น ----
 export async function updateGeneralFund(data: { generalBalance?: number; classFund?: number }) {
   try {
+    await requireAdmin();
+
     let fund = await prisma.generalFund.findFirst();
     if (fund) {
       fund = await prisma.generalFund.update({
@@ -284,6 +328,12 @@ export async function updateGeneralFund(data: { generalBalance?: number; classFu
 // ---- ADMIN: อัปเดต QR Code ของประกาศ ----
 export async function updateAnnouncementQr(announcementId: string, qrCodeUrl: string) {
   try {
+    await requireAdmin();
+
+    if (!isTrustedUploadUrl(qrCodeUrl)) {
+      return { success: false, error: "ลิงก์รูป QR Code ไม่ถูกต้อง" };
+    }
+
     const updated = await prisma.announcement.update({
       where: { id: announcementId },
       data: { qrCodeUrl },

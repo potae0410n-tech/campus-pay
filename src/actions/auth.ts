@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
+import { setSessionCookie, clearSessionCookie } from "@/lib/auth";
 
 const ADMIN_SECRET_CODE = "iloveIT2568"; // รหัสลับสำหรับสมัครแอดมิน
 
@@ -29,6 +30,9 @@ export async function loginUser(identifier: string, password: string) {
       return { success: false, error: "รหัสผ่านไม่ถูกต้อง" };
     }
 
+    // ออก session cookie (httpOnly) — server จะใช้ตัวนี้ยืนยันตัวตนทุก action
+    await setSessionCookie(user.id, user.role === "ADMIN" ? "ADMIN" : "STUDENT");
+
     return {
       success: true,
       role: user.role, // "STUDENT" or "ADMIN"
@@ -44,6 +48,12 @@ export async function loginUser(identifier: string, password: string) {
   } catch (error: any) {
     return { success: false, error: error.message };
   }
+}
+
+// ---- ออกจากระบบ ----
+export async function logoutUser() {
+  await clearSessionCookie();
+  return { success: true };
 }
 
 // ---- สมัครสมาชิก ----

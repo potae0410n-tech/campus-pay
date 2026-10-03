@@ -19,6 +19,7 @@ import {
   Search,
 } from "lucide-react";
 import { useViewMode } from "@/context/ViewModeContext";
+import { logoutUser } from "@/actions/auth";
 
 interface SidebarProps {
   role: "admin" | "student";
@@ -160,17 +161,21 @@ export default function Sidebar({ role }: SidebarProps) {
           <HelpCircle className="w-4 h-4 text-gray-400 shrink-0" />
           ช่วยเหลือ
         </Link>
-        <Link
-          href="/"
-          onClick={() => {
+        <button
+          type="button"
+          onClick={async () => {
+            await logoutUser();
             localStorage.removeItem("campuspay_is_admin");
             localStorage.removeItem("campuspay_view_as_student");
+            localStorage.removeItem("campuspay_student_id");
+            localStorage.removeItem("campuspay_user_name");
+            router.push("/");
           }}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-600 hover:bg-red-50 transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-600 hover:bg-red-50 transition-colors"
         >
           <LogOut className="w-4 h-4 text-red-500 shrink-0" />
           ออกจากระบบ
-        </Link>
+        </button>
       </div>
     </div>
   );

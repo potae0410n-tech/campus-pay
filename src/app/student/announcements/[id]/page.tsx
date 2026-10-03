@@ -67,9 +67,7 @@ export default function StudentAnnouncementDetailPage() {
     const res = await getAnnouncementById(id);
     if (res.success && res.announcement) {
       setAnn(res.announcement);
-      const me = res.announcement.payments.find(
-        (p: any) => p.user.studentId === currentStudentId
-      );
+      const me = res.announcement.payments.find((p: any) => p.isMe);
       setMyPayment(me || null);
     }
     setIsLoading(false);
@@ -535,7 +533,7 @@ export default function StudentAnnouncementDetailPage() {
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {ann.payments.map((p: any, idx: number) => {
-                    const isMe = p.user.studentId === currentStudentId;
+                    const isMe = p.isMe;
                     return (
                       <tr key={p.id} className={isMe ? "bg-blue-50/60" : "hover:bg-gray-50/50"}>
                         <td className="px-4 py-3 text-xs text-gray-400 font-medium">{idx + 1}</td>
