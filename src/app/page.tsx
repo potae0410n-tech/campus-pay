@@ -188,7 +188,6 @@ export default function LoginPage() {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="block text-sm font-medium text-gray-700">รหัสผ่าน</label>
-                  <a href="#" className="text-xs text-blue-600 hover:underline">ลืมรหัสผ่าน?</a>
                 </div>
                 <div className="relative">
                   <input

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ความสัมพันธ์ระหว่าง Entity - CampusPay</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #ffffff;
+      font-family: 'Sarabun', 'Leelawadee UI', Tahoma, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 1200px;
+      height: 1400px;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    svg {
+      width: 1200px;
+      height: 1400px;
+      display: block;
+    }
+    text {
+      font-family: 'Sarabun', 'Leelawadee UI', Tahoma, sans-serif;
+      user-select: none;
+    }
+    .halo {
+      paint-order: stroke fill;
+      stroke: #ffffff;
+      stroke-width: 6px;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 1200 1400" width="1200" height="1400" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- ========================================================== -->
+    <!-- ROW 1: ผู้ใช้งาน (User) --- 1 --- < สร้างประกาศ > --- M --- ประกาศเรียกเก็บเงิน (Announcement) -->
+    <!-- ========================================================== -->
+    <!-- Y = 180 -->
+    <!-- Line Left -->
+    <line x1="360" y1="180" x2="515" y2="180" stroke="#000000" stroke-width="1.8" />
+    <text x="390" y="170" font-size="18" font-weight="700" fill="#000000" class="halo">1</text>
+
+    <!-- Line Right -->
+    <line x1="685" y1="180" x2="840" y2="180" stroke="#000000" stroke-width="1.8" />
+    <text x="810" y="170" font-size="18" font-weight="700" fill="#000000" class="halo">M</text>
+
+    <!-- Left Entity: ผู้ใช้งาน -->
+    <g id="row1-left">
+      <rect x="120" y="145" width="240" height="70" fill="#ffffff" stroke="#000000" stroke-width="2.2" />
+      <text x="240" y="176" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">ผู้ใช้งาน</text>
+      <text x="240" y="199" text-anchor="middle" font-size="14.5" font-weight="500" fill="#000000">(User)</text>
+    </g>
+
+    <!-- Center Diamond: สร้างประกาศ -->
+    <g id="row1-diamond">
+      <polygon points="600,135 685,180 600,225 515,180" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="600" y="186" text-anchor="middle" font-size="16" font-weight="600" fill="#000000">สร้างประกาศ</text>
+    </g>
+
+    <!-- Right Entity: ประกาศเรียกเก็บเงิน -->
+    <g id="row1-right">
+      <rect x="840" y="145" width="240" height="70" fill="#ffffff" stroke="#000000" stroke-width="2.2" />
+      <text x="960" y="176" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">ประกาศเรียกเก็บเงิน</text>
+      <text x="960" y="199" text-anchor="middle" font-size="14.5" font-weight="500" fill="#000000">(Announcement)</text>
+    </g>
+
+
+    <!-- ========================================================== -->
+    <!-- ROW 2: ผู้ใช้งาน (User) --- 1 --- < ชำระเงิน > --- M --- การชำระเงิน (Payment) -->
+    <!-- ========================================================== -->
+    <!-- Y = 430 -->
+    <!-- Line Left -->
+    <line x1="360" y1="430" x2="515" y2="430" stroke="#000000" stroke-width="1.8" />
+    <text x="390" y="420" font-size="18" font-weight="700" fill="#000000" class="halo">1</text>
+
+    <!-- Line Right -->
+    <line x1="685" y1="430" x2="840" y2="430" stroke="#000000" stroke-width="1.8" />
+    <text x="810" y="420" font-size="18" font-weight="700" fill="#000000" class="halo">M</text>
+
+    <!-- Left Entity: ผู้ใช้งาน -->
+    <g id="row2-left">
+      <rect x="120" y="395" width="240" height="70" fill="#ffffff" stroke="#000000" stroke-width="2.2" />
+      <text x="240" y="426" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">ผู้ใช้งาน</text>
+      <text x="240" y="449" text-anchor="middle" font-size="14.5" font-weight="500" fill="#000000">(User)</text>
+    </g>
+
+    <!-- Center Diamond: ชำระเงิน -->
+    <g id="row2-diamond">
+      <polygon points="600,385 685,430 600,475 515,430" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="600" y="436" text-anchor="middle" font-size="16.5" font-weight="600" fill="#000000">ชำระเงิน</text>
+    </g>
+
+    <!-- Right Entity: การชำระเงิน -->
+    <g id="row2-right">
+      <rect x="840" y="395" width="240" height="70" fill="#ffffff" stroke="#000000" stroke-width="2.2" />
+      <text x="960" y="426" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">การชำระเงิน</text>
+      <text x="960" y="449" text-anchor="middle" font-size="14.5" font-weight="500" fill="#000000">(Payment)</text>
+    </g>
+
+
+    <!-- ========================================================== -->
+    <!-- ROW 3: ประกาศเรียกเก็บเงิน (Announcement) --- 1 --- < มีรายการชำระ > --- M --- การชำระเงิน (Payment) -->
+    <!-- ========================================================== -->
+    <!-- Y = 680 -->
+    <!-- Line Left -->
+    <line x1="360" y1="680" x2="515" y2="680" stroke="#000000" stroke-width="1.8" />
+    <text x="390" y="670" font-size="18" font-weight="700" fill="#000000" class="halo">1</text>
+
+    <!-- Line Right -->
+    <line x1="685" y1="680" x2="840" y2="680" stroke="#000000" stroke-width="1.8" />
+    <text x="810" y="670" font-size="18" font-weight="700" fill="#000000" class="halo">M</text>
+
+    <!-- Left Entity: ประกาศเรียกเก็บเงิน -->
+    <g id="row3-left">
+      <rect x="120" y="645" width="240" height="70" fill="#ffffff" stroke="#000000" stroke-width="2.2" />
+      <text x="240" y="676" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">ประกาศเรียกเก็บเงิน</text>
+      <text x="240" y="699" text-anchor="middle" font-size="14.5" font-weight="500" fill="#000000">(Announcement)</text>
+    </g>
+
+    <!-- Center Diamond: มีรายการชำระ -->
+    <g id="row3-diamond">
+      <polygon points="600,635 685,680 600,725 515,680" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="600" y="686" text-anchor="middle" font-size="16" font-weight="600" fill="#000000">มีรายการชำระ</text>
+    </g>
+
+    <!-- Right Entity: การชำระเงิน -->
+    <g id="row3-right">
+      <rect x="840" y="645" width="240" height="70" fill="#ffffff" stroke="#000000" stroke-width="2.2" />
+      <text x="960" y="676" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">การชำระเงิน</text>
+      <text x="960" y="699" text-anchor="middle" font-size="14.5" font-weight="500" fill="#000000">(Payment)</text>
+    </g>
+
+
+    <!-- ========================================================== -->
+    <!-- ROW 4: ผู้ใช้งาน (User) --- 1 --- < ปรับปรุงยอด > --- M --- เงินกองกลางและเงินรุ่น (GeneralFund) -->
+    <!-- ========================================================== -->
+    <!-- Y = 930 -->
+    <!-- Line Left -->
+    <line x1="360" y1="930" x2="515" y2="930" stroke="#000000" stroke-width="1.8" />
+    <text x="390" y="920" font-size="18" font-weight="700" fill="#000000" class="halo">1</text>
+
+    <!-- Line Right -->
+    <line x1="685" y1="930" x2="840" y2="930" stroke="#000000" stroke-width="1.8" />
+    <text x="810" y="920" font-size="18" font-weight="700" fill="#000000" class="halo">M</text>
+
+    <!-- Left Entity: ผู้ใช้งาน -->
+    <g id="row4-left">
+      <rect x="120" y="895" width="240" height="70" fill="#ffffff" stroke="#000000" stroke-width="2.2" />
+      <text x="240" y="926" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">ผู้ใช้งาน</text>
+      <text x="240" y="949" text-anchor="middle" font-size="14.5" font-weight="500" fill="#000000">(User)</text>
+    </g>
+
+    <!-- Center Diamond: ปรับปรุงยอด -->
+    <g id="row4-diamond">
+      <polygon points="600,885 685,930 600,975 515,930" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="600" y="936" text-anchor="middle" font-size="16" font-weight="600" fill="#000000">ปรับปรุงยอด</text>
+    </g>
+
+    <!-- Right Entity: เงินกองกลางและเงินรุ่น -->
+    <g id="row4-right">
+      <rect x="840" y="895" width="240" height="70" fill="#ffffff" stroke="#000000" stroke-width="2.2" />
+      <text x="960" y="926" text-anchor="middle" font-size="17" font-weight="700" fill="#000000">เงินกองกลางและเงินรุ่น</text>
+      <text x="960" y="949" text-anchor="middle" font-size="14.5" font-weight="500" fill="#000000">(GeneralFund)</text>
+    </g>
+
+
+    <!-- ========================================================== -->
+    <!-- ROW 5: การชำระเงิน (Payment) --- M --- < โอนเข้ากองกลาง > --- 1 --- เงินกองกลางและเงินรุ่น (GeneralFund) -->
+    <!-- ========================================================== -->
+    <!-- Y = 1180 -->
+    <!-- Line Left -->
+    <line x1="360" y1="1180" x2="515" y2="1180" stroke="#000000" stroke-width="1.8" />
+    <text x="390" y="1170" font-size="18" font-weight="700" fill="#000000" class="halo">M</text>
+
+    <!-- Line Right -->
+    <line x1="685" y1="1180" x2="840" y2="1180" stroke="#000000" stroke-width="1.8" />
+    <text x="810" y="1170" font-size="18" font-weight="700" fill="#000000" class="halo">1</text>
+
+    <!-- Left Entity: การชำระเงิน -->
+    <g id="row5-left">
+      <rect x="120" y="1145" width="240" height="70" fill="#ffffff" stroke="#000000" stroke-width="2.2" />
+      <text x="240" y="1176" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">การชำระเงิน</text>
+      <text x="240" y="1199" text-anchor="middle" font-size="14.5" font-weight="500" fill="#000000">(Payment)</text>
+    </g>
+
+    <!-- Center Diamond: โอนเข้ากองกลาง -->
+    <g id="row5-diamond">
+      <polygon points="600,1135 685,1180 600,1225 515,1180" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="600" y="1186" text-anchor="middle" font-size="15.5" font-weight="600" fill="#000000">โอนเข้ากองกลาง</text>
+    </g>
+
+    <!-- Right Entity: เงินกองกลางและเงินรุ่น -->
+    <g id="row5-right">
+      <rect x="840" y="1145" width="240" height="70" fill="#ffffff" stroke="#000000" stroke-width="2.2" />
+      <text x="960" y="1176" text-anchor="middle" font-size="17" font-weight="700" fill="#000000">เงินกองกลางและเงินรุ่น</text>
+      <text x="960" y="1199" text-anchor="middle" font-size="14.5" font-weight="500" fill="#000000">(GeneralFund)</text>
+    </g>
+
+  </svg>
+</body>
+</html>

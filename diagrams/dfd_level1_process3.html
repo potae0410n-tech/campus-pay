@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>DFD Level 1 - Process 3.0 - CampusPay</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: #ffffff;
+    font-family: 'Sarabun', 'Leelawadee UI', Tahoma, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1200px;
+    height: 1700px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  svg {
+    width: 1200px;
+    height: 1700px;
+  }
+  text {
+    font-family: 'Sarabun', 'Leelawadee UI', Tahoma, sans-serif;
+    user-select: none;
+  }
+  .halo {
+    paint-order: stroke fill;
+    stroke: #ffffff;
+    stroke-width: 6px;
+    stroke-linejoin: round;
+  }
+</style>
+</head>
+<body>
+  <svg viewBox="0 0 1200 1700" xmlns="http://www.w3.org/2000/svg">
+    
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000" />
+    </marker>
+  </defs>
+  <rect x="70" y="60" width="1060" height="1460" fill="none" stroke="#000000" stroke-width="1.8" />
+
+
+    <!-- ENTITY: เหรัญญิก / แอดมิน (Treasurer / Admin) -->
+    <g id="entity-admin">
+      <rect x="910" y="490" width="200" height="110" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="1010" y="540" text-anchor="middle" font-size="22" font-weight="700" fill="#000">เหรัญญิก / แอดมิน</text>
+      <text x="1010" y="576" text-anchor="middle" font-size="17" font-weight="400" fill="#000">(Treasurer / Admin)</text>
+    </g>
+
+    <!-- DATA STORE D2: แฟ้มข้อมูลประกาศ -->
+    <g id="datastore-d2">
+      <rect x="110" y="181" width="230" height="38" fill="#ffffff" stroke="none" />
+      <line x1="110" y1="181" x2="340" y2="181" stroke="#000000" stroke-width="1.8" />
+      <line x1="110" y1="219" x2="340" y2="219" stroke="#000000" stroke-width="1.8" />
+      <line x1="155" y1="181" x2="155" y2="219" stroke="#000000" stroke-width="1.5" />
+      <text x="132" y="206" text-anchor="middle" font-size="15" font-weight="700" fill="#000">D2</text>
+      <text x="247" y="206" text-anchor="middle" font-size="14" font-weight="600" fill="#000">แฟ้มข้อมูลประกาศ</text>
+    </g>
+
+    <!-- DATA STORE D1: แฟ้มข้อมูลผู้ใช้งาน -->
+    <g id="datastore-d1">
+      <rect x="110" y="320" width="230" height="38" fill="#ffffff" stroke="none" />
+      <line x1="110" y1="320" x2="340" y2="320" stroke="#000000" stroke-width="1.8" />
+      <line x1="110" y1="358" x2="340" y2="358" stroke="#000000" stroke-width="1.8" />
+      <line x1="155" y1="320" x2="155" y2="358" stroke="#000000" stroke-width="1.5" />
+      <text x="132" y="345" text-anchor="middle" font-size="15" font-weight="700" fill="#000">D1</text>
+      <text x="247" y="345" text-anchor="middle" font-size="14" font-weight="600" fill="#000">แฟ้มข้อมูลผู้ใช้งาน</text>
+    </g>
+
+    <!-- DATA STORE D3: แฟ้มข้อมูลการชำระเงิน (ตรงแนวนอนกับ 3.2 พอดี) -->
+    <g id="datastore-d3">
+      <rect x="110" y="526" width="230" height="38" fill="#ffffff" stroke="none" />
+      <line x1="110" y1="526" x2="340" y2="526" stroke="#000000" stroke-width="1.8" />
+      <line x1="110" y1="564" x2="340" y2="564" stroke="#000000" stroke-width="1.8" />
+      <line x1="155" y1="526" x2="155" y2="564" stroke="#000000" stroke-width="1.5" />
+      <text x="132" y="551" text-anchor="middle" font-size="15" font-weight="700" fill="#000">D3</text>
+      <text x="247" y="551" text-anchor="middle" font-size="14" font-weight="600" fill="#000">แฟ้มข้อมูลการชำระเงิน</text>
+    </g>
+
+    <!-- DATA STORE D4: แฟ้มข้อมูลเงินกองกลางและเงินรุ่น (ตรงแนวนอนกับ 3.3 พอดี) -->
+    <g id="datastore-d4">
+      <rect x="110" y="861" width="250" height="38" fill="#ffffff" stroke="none" />
+      <line x1="110" y1="861" x2="360" y2="861" stroke="#000000" stroke-width="1.8" />
+      <line x1="110" y1="899" x2="360" y2="899" stroke="#000000" stroke-width="1.8" />
+      <line x1="155" y1="861" x2="155" y2="899" stroke="#000000" stroke-width="1.5" />
+      <text x="132" y="886" text-anchor="middle" font-size="15" font-weight="700" fill="#000">D4</text>
+      <text x="257" y="886" text-anchor="middle" font-size="13.5" font-weight="600" fill="#000">แฟ้มข้อมูลเงินกองกลางและเงินรุ่น</text>
+    </g>
+
+    <!-- PROCESS 3.1: สร้างประกาศเรียกเก็บเงิน -->
+    <g id="process-3-1">
+      <circle cx="560" cy="200" r="74" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <line x1="486" y1="190" x2="634" y2="190" stroke="#000000" stroke-width="1.5" />
+      <text x="560" y="172" text-anchor="middle" font-size="22" font-weight="700" fill="#000">3.1</text>
+      <text x="560" y="218" text-anchor="middle" font-size="14.5" font-weight="600" fill="#000">สร้างประกาศ</text>
+      <text x="560" y="242" text-anchor="middle" font-size="14.5" font-weight="600" fill="#000">เรียกเก็บเงิน</text>
+    </g>
+
+    <!-- PROCESS 3.2: ตรวจสอบหลักฐานสลิปการโอนเงิน -->
+    <g id="process-3-2">
+      <circle cx="560" cy="545" r="74" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <line x1="486" y1="535" x2="634" y2="535" stroke="#000000" stroke-width="1.5" />
+      <text x="560" y="517" text-anchor="middle" font-size="22" font-weight="700" fill="#000">3.2</text>
+      <text x="560" y="563" text-anchor="middle" font-size="14.5" font-weight="600" fill="#000">ตรวจสอบหลักฐาน</text>
+      <text x="560" y="587" text-anchor="middle" font-size="14.5" font-weight="600" fill="#000">สลิปการโอนเงิน</text>
+    </g>
+
+    <!-- PROCESS 3.3: บันทึกผลการตรวจสลิป -->
+    <g id="process-3-3">
+      <circle cx="560" cy="880" r="74" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <line x1="486" y1="870" x2="634" y2="870" stroke="#000000" stroke-width="1.5" />
+      <text x="560" y="852" text-anchor="middle" font-size="22" font-weight="700" fill="#000">3.3</text>
+      <text x="560" y="898" text-anchor="middle" font-size="14.5" font-weight="600" fill="#000">บันทึกผลการตรวจสลิป</text>
+      <text x="560" y="922" text-anchor="middle" font-size="14.5" font-weight="600" fill="#000">(อนุมัติ / ปฏิเสธ)</text>
+    </g>
+
+    <!-- FLOWS -->
+    <!-- เหรัญญิก -> 3.1 -->
+    <path d="M 1010 490 L 1010 200 L 640 200" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="825" y="188" text-anchor="middle" font-size="13.5" fill="#000" class="halo">ข้อมูลประกาศ / ยอดเงิน / วันครบกำหนด</text>
+
+    <!-- 3.1 -> D2 (แนวนอนตรง) -->
+    <path d="M 486 200 L 345 200" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="415" y="188" text-anchor="middle" font-size="13" fill="#000" class="halo">บันทึกประกาศ</text>
+
+    <!-- D1 -> 3.1 -->
+    <path d="M 340 339 L 430 339 L 430 250 L 490 250" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="390" y="328" text-anchor="middle" font-size="12.5" fill="#000" class="halo">ดึงรายชื่อ นศ.</text>
+
+    <!-- 3.1 -> D3 -->
+    <path d="M 530 273 L 530 440 L 225 440 L 225 520" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="375" y="428" text-anchor="middle" font-size="13" fill="#000" class="halo">สร้างรายการชำระตั้งต้น (UNPAID)</text>
+
+    <!-- D3 -> 3.2 (แนวนอนตรง 100%) -->
+    <path d="M 340 545 L 480 545" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="410" y="533" text-anchor="middle" font-size="13" fill="#000" class="halo">ดึงสลิปที่รอตรวจ</text>
+
+    <!-- 3.2 -> เหรัญญิก (แนวนอนตรง 100%) -->
+    <path d="M 634 545 L 905 545" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="770" y="533" text-anchor="middle" font-size="13" fill="#000" class="halo">รายการสลิปและหลักฐานโอนเงิน</text>
+
+    <!-- เหรัญญิก -> 3.3 -->
+    <path d="M 1010 600 L 1010 880 L 640 880" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="825" y="868" text-anchor="middle" font-size="13.5" fill="#000" class="halo">ผลตรวจ (อนุมัติ / ปฏิเสธ + เหตุผล)</text>
+
+    <!-- 3.3 -> D3 (ขึ้นเข้าใต้ D3) -->
+    <path d="M 530 807 L 530 660 L 225 660 L 225 570" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="375" y="648" text-anchor="middle" font-size="13" fill="#000" class="halo">อัปเดตสถานะชำระเงิน</text>
+
+    <!-- 3.3 -> D4 (แนวนอนตรง 100%) -->
+    <path d="M 486 880 L 365 880" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="425" y="868" text-anchor="middle" font-size="13" fill="#000" class="halo">อัปเดตยอดเข้ากองกลาง</text>
+
+    <!-- CAPTION -->
+    <text x="600" y="1575" text-anchor="middle" font-size="26" font-weight="700" fill="#000">DFD Level 1: Process 3.0</text>
+    <text x="600" y="1612" text-anchor="middle" font-size="19" font-weight="400" fill="#000">กระบวนการจัดการประกาศและตรวจสอบสลิป (CampusPay)</text>
+  </svg>
+</body>
+</html>

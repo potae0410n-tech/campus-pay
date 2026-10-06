@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Dictionary Page 11</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #ffffff;
+      font-family: 'Sarabun', 'Leelawadee UI', Tahoma, sans-serif;
+      width: 1200px;
+      height: 1600px;
+      margin: 0;
+      padding: 80px 90px;
+      overflow: hidden;
+      color: #000000;
+    }
+    .data-element-card {
+      border: 1.8px solid #000000;
+      padding: 24px 30px;
+      width: 100%;
+      background: #ffffff;
+    }
+    .field-row {
+      display: flex;
+      line-height: 2.1;
+      font-size: 16px;
+    }
+    .label {
+      font-weight: 400;
+      color: #000000;
+      white-space: nowrap;
+      min-width: 320px;
+    }
+    .value {
+      color: #000000;
+      padding-left: 8px;
+    }
+    .val-title {
+      font-weight: 600;
+    }
+    .table-caption {
+      text-align: center;
+      font-size: 17px;
+      font-weight: 600;
+      margin-top: 14px;
+      margin-bottom: 35px;
+      color: #000000;
+    }
+    .spacer {
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">รหัสประกาศที่ชำระ</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">announcementId</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 36 (UUID)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลการชำระเงิน (D3 Payment)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เชื่อมโยงตามรายการประกาศที่เลือกชำระ</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">นักศึกษา / ระบบ</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องมีอยู่ในตาราง Announcement</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">คีย์นอก (Foreign Key) อ้างอิง Announcement(id)</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 21 พจนานุกรมของหน่วยข้อมูลรหัสประกาศที่ชำระ</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">หลักฐานสลิปโอนเงิน</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">slipUrl</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 255 (URL)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">https://...</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลการชำระเงิน (D3 Payment)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">อัปโหลดและจัดเก็บบน CDN ที่มีความปลอดภัยสูง</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">นักศึกษา (ผู้อัปโหลด)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ยอมรับค่าว่างได้ขณะเริ่มต้น (UNPAID), ต้องเป็นไฟล์ภาพ .jpg/.png</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">ภาพสลิปสำหรับให้เหรัญญิกตรวจสอบ</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 22 พจนานุกรมของหน่วยข้อมูลหลักฐานสลิปโอนเงิน</div>
+  
+</body>
+</html>

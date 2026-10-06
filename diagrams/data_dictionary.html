@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>พจนานุกรมข้อมูล (Data Dictionary) - CampusPay</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #e9ecef;
+      font-family: 'Sarabun', 'Leelawadee UI', Tahoma, sans-serif;
+      color: #000000;
+      padding-bottom: 60px;
+    }
+    .top-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #1e293b;
+      color: #ffffff;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .toolbar-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .toolbar-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #1d4ed8;
+    }
+    .btn-secondary {
+      background: #475569;
+    }
+    .btn-secondary:hover {
+      background: #334155;
+    }
+    .a4-page {
+      width: 1000px;
+      min-height: 1414px;
+      background: #ffffff;
+      margin: 30px auto;
+      padding: 70px 80px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      page-break-after: always;
+      break-after: page;
+      position: relative;
+    }
+    .page-indicator {
+      text-align: right;
+      font-size: 14px;
+      color: #888888;
+      margin-bottom: 20px;
+    }
+    .page-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .data-element-card {
+      border: 1.8px solid #000000;
+      padding: 22px 28px;
+      width: 100%;
+      background: #ffffff;
+    }
+    .field-row {
+      display: flex;
+      line-height: 2.05;
+      font-size: 16px;
+    }
+    .label {
+      font-weight: 400;
+      color: #000000;
+      white-space: nowrap;
+      min-width: 320px;
+    }
+    .value {
+      color: #000000;
+      padding-left: 8px;
+      word-break: break-word;
+    }
+    .val-title {
+      font-weight: 600;
+    }
+    .table-caption {
+      text-align: center;
+      font-size: 16.5px;
+      font-weight: 600;
+      margin-top: 12px;
+      margin-bottom: 30px;
+      color: #000000;
+    }
+    .spacer {
+      height: 15px;
+    }
+    @media print {
+      body { background: none; padding: 0; }
+      .no-print { display: none !important; }
+      @page {
+        size: A4 portrait;
+        margin: 15mm 20mm;
+      }
+      .a4-page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        page-break-after: always;
+        break-after: page;
+      }
+      .page-indicator {
+        display: none;
+      }
+      .data-element-card {
+        border: 1.5pt solid #000000;
+        padding: 16pt 20pt;
+      }
+      .field-row {
+        line-height: 1.9;
+        font-size: 13.5pt;
+      }
+      .label {
+        min-width: 250pt;
+      }
+      .table-caption {
+        font-size: 14pt;
+        margin-top: 10pt;
+        margin-bottom: 25pt;
+      }
+      .spacer {
+        height: 10pt;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-toolbar no-print">
+    <div class="toolbar-title">📚 พจนานุกรมข้อมูล (Data Dictionary) ทั้งหมด 31 ตาราง (หน้าละ 2 ตาราง)</div>
+    <div class="toolbar-actions">
+      <button class="btn" onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF (Print)</button>
+    </div>
+  </div>
+  
+    <div class="a4-page" id="page-1">
+      <div class="page-indicator no-print">หน้า 1 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">รหัสผู้ใช้</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">id, userId</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 36 (UUID)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">สร้างอัตโนมัติ (UUID v4)</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลผู้ใช้งาน (D1 User)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">ผู้ดูแลระบบและเจ้าของบัญชีเท่านั้นที่สามารถเข้าถึงได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">ผู้ดูแลระบบ (Admin)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องไม่ซ้ำกัน (Unique)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">คีย์หลัก (Primary Key)</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 1 พจนานุกรมของหน่วยข้อมูลรหัสผู้ใช้</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">ชื่อบัญชีผู้ใช้</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">username</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 50</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxxxxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลผู้ใช้งาน (D1 User)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">ผู้ดูแลระบบและเจ้าของบัญชีเท่านั้นที่สามารถเข้าถึงได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">นักศึกษา และ แอดมิน/เหรัญญิก</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องไม่ซ้ำกัน (Unique)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">ใช้สำหรับเข้าสู่ระบบ (Login)</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 2 พจนานุกรมของหน่วยข้อมูลชื่อบัญชีผู้ใช้</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-2">
+      <div class="page-indicator no-print">หน้า 2 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">รหัสผ่าน</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">password</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 100 (Bcrypt Hash)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">••••••••••••••••</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลผู้ใช้งาน (D1 User)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">มีการเข้ารหัสความปลอดภัยทางเดียวแบบ Bcrypt ห้ามแสดงผลรหัสจริง</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">นักศึกษา และ แอดมิน/เหรัญญิก</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ความยาวไม่น้อยกว่า 6 ตัวอักษร</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">จัดเก็บในรูปแบบ Hashed Password</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 3 พจนานุกรมของหน่วยข้อมูลรหัสผ่าน</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">ชื่อจริง</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">firstName</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 50</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxxxxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลผู้ใช้งาน (D1 User)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">ผู้ใช้งานในระบบสามารถอ่านได้ ผู้ดูแลระบบสามารถแก้ไขได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">นักศึกษา</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), รับเฉพาะตัวอักษร</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">ชื่อจริงของนักศึกษาหรือแอดมิน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 4 พจนานุกรมของหน่วยข้อมูลชื่อจริง</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-3">
+      <div class="page-indicator no-print">หน้า 3 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">นามสกุล</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">lastName</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 50</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxxxxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลผู้ใช้งาน (D1 User)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">ผู้ใช้งานในระบบสามารถอ่านได้ ผู้ดูแลระบบสามารถแก้ไขได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">นักศึกษา</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), รับเฉพาะตัวอักษร</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">นามสกุลของนักศึกษาหรือแอดมิน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 5 พจนานุกรมของหน่วยข้อมูลนามสกุล</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">รหัสนักศึกษา</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">studentId</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 20</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลผู้ใช้งาน (D1 User)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">สมาชิกในระบบสามารถเรียกดูได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">นักศึกษา</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องไม่ซ้ำกัน (Unique)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">ใช้ระบุตัวตนนศ. และตรวจสอบยอดชำระเงิน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 6 พจนานุกรมของหน่วยข้อมูลรหัสนักศึกษา</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-4">
+      <div class="page-indicator no-print">หน้า 4 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">บทบาทสิทธิ์การใช้งาน</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">role</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 10</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">"STUDENT"</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลผู้ใช้งาน (D1 User)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">ผู้ดูแลระบบเท่านั้นที่สามารถกำหนดและแก้ไขได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">ผู้ดูแลระบบ (Admin)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">กำหนดค่าได้เฉพาะ "STUDENT" หรือ "ADMIN" เท่านั้น</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">ควบคุมสิทธิ์การเข้าถึงเมนูและการอนุมัติสลิป</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 7 พจนานุกรมของหน่วยข้อมูลบทบาทสิทธิ์การใช้งาน</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">วันที่ลงทะเบียน</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">createdAt</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">DateTime</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">วว/ดด/ปปปป ชช:นน:วว</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">วันเวลาปัจจุบัน (Current Timestamp)</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลผู้ใช้งาน (D1 User)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">บันทึกโดยระบบอัตโนมัติ ไม่อนุญาตให้แก้ไข</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">ระบบ (System)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), รูปแบบวันเวลาสากล</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">วันเวลาที่สร้างบัญชีผู้ใช้งาน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 8 พจนานุกรมของหน่วยข้อมูลวันที่ลงทะเบียน</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-5">
+      <div class="page-indicator no-print">หน้า 5 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">รหัสประกาศ</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">id, announcementId</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 36 (UUID)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">สร้างอัตโนมัติ (UUID v4)</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">ผู้ดูแลระบบเท่านั้นที่สามารถสร้างและแก้ไขได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน (Treasurer/Admin)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องไม่ซ้ำกัน (Unique)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">คีย์หลัก (Primary Key)</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 9 พจนานุกรมของหน่วยข้อมูลรหัสประกาศ</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">หัวข้อประกาศ</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">title</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 100</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxxxxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเป็นผู้แก้ไข นักศึกษาสามารถอ่านได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">เช่น ค่าเสื้อรุ่น, ค่ากิจกรรมบายเนียร์</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 10 พจนานุกรมของหน่วยข้อมูลหัวข้อประกาศ</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-6">
+      <div class="page-indicator no-print">หน้า 6 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">รายละเอียดประกาศ</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">description</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Text</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxxxxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเป็นผู้แก้ไข นักศึกษาสามารถอ่านได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ยอมรับค่าว่างได้ (Nullable)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">ชี้แจงวัตถุประสงค์และรายละเอียดการจ่ายเงิน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 11 พจนานุกรมของหน่วยข้อมูลรายละเอียดประกาศ</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">ยอดเงินที่เรียกเก็บ</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">amount</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Float / Decimal(10,2)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">999,999.99 บาท</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">0.00</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเป็นผู้กำหนด</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องเป็นตัวเลขมากกว่า 0</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">จำนวนเงินต่อนักศึกษา 1 คน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 12 พจนานุกรมของหน่วยข้อมูลยอดเงินที่เรียกเก็บ</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-7">
+      <div class="page-indicator no-print">หน้า 7 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">เลขที่บัญชีธนาคาร</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">bankAccount</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 30</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxx-x-xxxxx-x</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเป็นผู้กำหนด</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), เฉพาะตัวเลข</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">เลขบัญชีปลายทางที่รับโอนเงิน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 13 พจนานุกรมของหน่วยข้อมูลเลขที่บัญชีธนาคาร</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">ชื่อธนาคาร</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">bankName</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 50</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxxxxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเป็นผู้กำหนด</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">เช่น ธนาคารกรุงไทย, ธนาคารกสิกรไทย</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 14 พจนานุกรมของหน่วยข้อมูลชื่อธนาคาร</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-8">
+      <div class="page-indicator no-print">หน้า 8 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">คิวอาร์โค้ดพร้อมเพย์</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">qrCodeUrl</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 255 (URL)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">https://...</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">จัดเก็บผ่านบริการ UploadThing CDN</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ยอมรับค่าว่างได้ (Nullable), รูปแบบ URL ถูกต้อง</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">รูปภาพ QR Code สำหรับสแกนชำระเงิน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 15 พจนานุกรมของหน่วยข้อมูลคิวอาร์โค้ดพร้อมเพย์</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">วันเริ่มชำระเงิน</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">startDate</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">DateTime</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">วว/ดด/ปปปป</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">วันที่สร้างประกาศ</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเป็นผู้กำหนด</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องเป็นวันที่ไม่เกินวันครบกำหนด</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">วันเริ่มต้นที่เปิดให้นักศึกษาส่งสลิป</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 16 พจนานุกรมของหน่วยข้อมูลวันเริ่มชำระเงิน</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-9">
+      <div class="page-indicator no-print">หน้า 9 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">วันครบกำหนดชำระ</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">dueDate</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">DateTime</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">วว/ดด/ปปปป</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเป็นผู้กำหนด</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องมากกว่าวันเริ่มชำระ</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">วันสุดท้ายของการชำระเงินตามประกาศ</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 17 พจนานุกรมของหน่วยข้อมูลวันครบกำหนดชำระ</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">วันที่สร้างประกาศ</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">createdAt</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">DateTime</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">วว/ดด/ปปปป ชช:นน:วว</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">วันเวลาปัจจุบัน (Current Timestamp)</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">บันทึกโดยระบบอัตโนมัติ ไม่อนุญาตให้แก้ไข</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">ระบบ (System)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">วันเวลาที่บันทึกข้อมูลประกาศลงระบบ</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 18 พจนานุกรมของหน่วยข้อมูลวันที่สร้างประกาศ</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-10">
+      <div class="page-indicator no-print">หน้า 10 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">รหัสการชำระเงิน</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">id, paymentId</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 36 (UUID)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">สร้างอัตโนมัติ (UUID v4)</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลการชำระเงิน (D3 Payment)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">ผู้ดูแลระบบและเจ้าของรายการชำระเท่านั้นที่เข้าถึงได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">ระบบ (System)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องไม่ซ้ำกัน (Unique)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">คีย์หลัก (Primary Key)</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 19 พจนานุกรมของหน่วยข้อมูลรหัสการชำระเงิน</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">รหัสผู้ใช้งานที่ชำระ</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">userId</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 36 (UUID)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลการชำระเงิน (D3 Payment)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เชื่อมโยงตามบัญชีผู้ใช้งานที่กำลังเข้าสู่ระบบ</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">นักศึกษา / ระบบ</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องมีอยู่ในตาราง User</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">คีย์นอก (Foreign Key) อ้างอิง User(id)</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 20 พจนานุกรมของหน่วยข้อมูลรหัสผู้ใช้งานที่ชำระ</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-11">
+      <div class="page-indicator no-print">หน้า 11 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">รหัสประกาศที่ชำระ</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">announcementId</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 36 (UUID)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลการชำระเงิน (D3 Payment)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เชื่อมโยงตามรายการประกาศที่เลือกชำระ</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">นักศึกษา / ระบบ</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องมีอยู่ในตาราง Announcement</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">คีย์นอก (Foreign Key) อ้างอิง Announcement(id)</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 21 พจนานุกรมของหน่วยข้อมูลรหัสประกาศที่ชำระ</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">หลักฐานสลิปโอนเงิน</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">slipUrl</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 255 (URL)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">https://...</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลการชำระเงิน (D3 Payment)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">อัปโหลดและจัดเก็บบน CDN ที่มีความปลอดภัยสูง</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">นักศึกษา (ผู้อัปโหลด)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ยอมรับค่าว่างได้ขณะเริ่มต้น (UNPAID), ต้องเป็นไฟล์ภาพ .jpg/.png</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">ภาพสลิปสำหรับให้เหรัญญิกตรวจสอบ</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 22 พจนานุกรมของหน่วยข้อมูลหลักฐานสลิปโอนเงิน</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-12">
+      <div class="page-indicator no-print">หน้า 12 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">สถานะการชำระเงิน</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">status</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 15</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">"UNPAID"</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลการชำระเงิน (D3 Payment)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เฉพาะเหรัญญิก/แอดมินเท่านั้นที่สามารถเปลี่ยนสถานะอนุมัติ/ปฏิเสธได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">กำหนดค่าได้เฉพาะ "UNPAID", "PENDING", "APPROVED", "REJECTED"</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">UNPAID=ยังไม่จ่าย, PENDING=รอตรวจ, APPROVED=อนุมัติ, REJECTED=ปฏิเสธ</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 23 พจนานุกรมของหน่วยข้อมูลสถานะการชำระเงิน</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">เหตุผลที่ปฏิเสธสลิป</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">rejectReason</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Text</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxxxxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลการชำระเงิน (D3 Payment)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเป็นผู้กรอกเมื่อปฏิเสธสลิป</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ยอมรับค่าว่างได้ (Nullable)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">เช่น ยอดเงินไม่ตรง, สลิปซ้ำ, ภาพไม่ชัดเจน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 24 พจนานุกรมของหน่วยข้อมูลเหตุผลที่ปฏิเสธสลิป</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-13">
+      <div class="page-indicator no-print">หน้า 13 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">วันที่ส่งสลิปชำระเงิน</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">createdAt</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">DateTime</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">วว/ดด/ปปปป ชช:นน:วว</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">วันเวลาปัจจุบัน (Current Timestamp)</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลการชำระเงิน (D3 Payment)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">บันทึกโดยระบบอัตโนมัติ ไม่อนุญาตให้แก้ไข</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">ระบบ (System)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">วันเวลาที่สร้างรายการชำระเงิน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 25 พจนานุกรมของหน่วยข้อมูลวันที่ส่งสลิปชำระเงิน</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">วันที่ตรวจสอบผล</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">updatedAt</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">DateTime</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">วว/ดด/ปปปป ชช:นน:วว</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">วันเวลาปัจจุบัน (Current Timestamp)</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลการชำระเงิน (D3 Payment)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">บันทึกโดยระบบอัตโนมัติเมื่อมีการเปลี่ยนแปลงสถานะ</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">ระบบ (System)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">วันเวลาที่เหรัญญิกกดอนุมัติหรือปฏิเสธ</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 26 พจนานุกรมของหน่วยข้อมูลวันที่ตรวจสอบผล</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-14">
+      <div class="page-indicator no-print">หน้า 14 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">รหัสเงินกองกลาง</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">id, fundId</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 36 (UUID)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">สร้างอัตโนมัติ (UUID v4)</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลเงินกองกลางและเงินรุ่น (D4 GeneralFund)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">ผู้ดูแลระบบเท่านั้นที่สามารถเข้าถึงได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">ผู้ดูแลระบบ (Admin)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องไม่ซ้ำกัน (Unique)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">คีย์หลัก (Primary Key)</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 27 พจนานุกรมของหน่วยข้อมูลรหัสเงินกองกลาง</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">ยอดเงินกองกลางคงเหลือ</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">generalBalance</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Float / Decimal(10,2)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">999,999.99 บาท</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">0.00</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลเงินกองกลางและเงินรุ่น (D4 GeneralFund)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเท่านั้นที่สามารถปรับปรุงยอดได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องเป็นตัวเลข</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">ยอดรายรับ - ยอดรายจ่ายกองกลาง</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">เงินกองกลางสำหรับกิจกรรมสาขา</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 28 พจนานุกรมของหน่วยข้อมูลยอดเงินกองกลางคงเหลือ</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-15">
+      <div class="page-indicator no-print">หน้า 15 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">ยอดเงินรุ่นคงเหลือ</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">classFund</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Float / Decimal(10,2)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">999,999.99 บาท</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">0.00</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลเงินกองกลางและเงินรุ่น (D4 GeneralFund)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเท่านั้นที่สามารถปรับปรุงยอดได้</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องเป็นตัวเลข</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">ยอดเงินรุ่นคงเหลือ</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">เงินรุ่นสำหรับบริหารจัดการภายในรุ่น</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 29 พจนานุกรมของหน่วยข้อมูลยอดเงินรุ่นคงเหลือ</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">ชื่อผู้ปรับปรุงยอด</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">updatedBy</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 50</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxxxxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลเงินกองกลางและเงินรุ่น (D4 GeneralFund)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">บันทึกชื่อของเหรัญญิกที่ล็อกอินเข้าใช้งาน</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ยอมรับค่าว่างได้ (Nullable)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">ระบุว่าเหรัญญิกคนใดเป็นผู้อัปเดตยอดล่าสุด</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 30 พจนานุกรมของหน่วยข้อมูลชื่อผู้ปรับปรุงยอด</div>
+  
+      </div>
+    </div>
+  
+
+    <div class="a4-page" id="page-16">
+      <div class="page-indicator no-print">หน้า 16 จาก 16</div>
+      <div class="page-content">
+        
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">วันที่ปรับปรุงล่าสุด</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">updatedAt</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">DateTime</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">วว/ดด/ปปปป ชช:นน:วว</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">วันเวลาปัจจุบัน (Current Timestamp)</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลเงินกองกลางและเงินรุ่น (D4 GeneralFund)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">บันทึกโดยระบบอัตโนมัติเมื่อมีการอัปเดตยอดเงิน</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">ระบบ (System)</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">วันเวลาที่ปรับปรุงยอดเงินครั้งล่าสุด</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 31 พจนานุกรมของหน่วยข้อมูลวันที่ปรับปรุงล่าสุด</div>
+  
+      </div>
+    </div>
+  
+</body>
+</html>

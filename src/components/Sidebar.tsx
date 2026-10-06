@@ -5,8 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
   LayoutDashboard,
-  Settings,
-  HelpCircle,
   LogOut,
   FolderOpen,
   Clock,
@@ -148,20 +146,6 @@ export default function Sidebar({ role }: SidebarProps) {
 
       {/* Bottom Navigation */}
       <div className="px-3 py-3 border-t border-gray-100 space-y-1">
-        <Link
-          href="#"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-gray-50 transition-colors"
-        >
-          <Settings className="w-4 h-4 text-gray-400 shrink-0" />
-          การตั้งค่า
-        </Link>
-        <Link
-          href="#"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-gray-50 transition-colors"
-        >
-          <HelpCircle className="w-4 h-4 text-gray-400 shrink-0" />
-          ช่วยเหลือ
-        </Link>
         <button
           type="button"
           onClick={async () => {

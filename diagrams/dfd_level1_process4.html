@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>DFD Level 1 - Process 4.0 - CampusPay</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: #ffffff;
+    font-family: 'Sarabun', 'Leelawadee UI', Tahoma, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1200px;
+    height: 1700px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  svg {
+    width: 1200px;
+    height: 1700px;
+  }
+  text {
+    font-family: 'Sarabun', 'Leelawadee UI', Tahoma, sans-serif;
+    user-select: none;
+  }
+  .halo {
+    paint-order: stroke fill;
+    stroke: #ffffff;
+    stroke-width: 6px;
+    stroke-linejoin: round;
+  }
+</style>
+</head>
+<body>
+  <svg viewBox="0 0 1200 1700" xmlns="http://www.w3.org/2000/svg">
+    
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000" />
+    </marker>
+  </defs>
+  <rect x="70" y="60" width="1060" height="1460" fill="none" stroke="#000000" stroke-width="1.8" />
+
+
+    <!-- ROW 1 (TOP): STUDENT & PERSONAL PAYMENT HISTORY -->
+    <!-- ENTITY: นักศึกษา -->
+    <g id="entity-student">
+      <rect x="80" y="195" width="180" height="110" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="170" y="245" text-anchor="middle" font-size="23" font-weight="700" fill="#000">นักศึกษา</text>
+      <text x="170" y="281" text-anchor="middle" font-size="17" font-weight="400" fill="#000">(Student)</text>
+    </g>
+
+    <!-- PROCESS 4.2: ออกรายงานประวัติชำระเงินส่วนบุคคล -->
+    <g id="process-4-2">
+      <circle cx="500" cy="250" r="74" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <line x1="426" y1="240" x2="574" y2="240" stroke="#000000" stroke-width="1.5" />
+      <text x="500" y="222" text-anchor="middle" font-size="22" font-weight="700" fill="#000">4.2</text>
+      <text x="500" y="268" text-anchor="middle" font-size="14.5" font-weight="600" fill="#000">ออกรายงานประวัติ</text>
+      <text x="500" y="292" text-anchor="middle" font-size="14.5" font-weight="600" fill="#000">ชำระเงินส่วนบุคคล</text>
+    </g>
+
+    <!-- DATA STORE D3: แฟ้มข้อมูลการชำระเงิน -->
+    <g id="datastore-d3">
+      <rect x="750" y="231" width="240" height="38" fill="#ffffff" stroke="none" />
+      <line x1="750" y1="231" x2="990" y2="231" stroke="#000000" stroke-width="1.8" />
+      <line x1="750" y1="269" x2="990" y2="269" stroke="#000000" stroke-width="1.8" />
+      <line x1="795" y1="231" x2="795" y2="269" stroke="#000000" stroke-width="1.5" />
+      <text x="772" y="256" text-anchor="middle" font-size="15" font-weight="700" fill="#000">D3</text>
+      <text x="892" y="256" text-anchor="middle" font-size="14" font-weight="600" fill="#000">แฟ้มข้อมูลการชำระเงิน</text>
+    </g>
+
+    <!-- ROW 2 (MIDDLE): ADMIN & GENERAL FUND ADJUSTMENT -->
+    <!-- DATA STORE D4: แฟ้มข้อมูลเงินกองกลางและเงินรุ่น -->
+    <g id="datastore-d4">
+      <rect x="80" y="561" width="250" height="38" fill="#ffffff" stroke="none" />
+      <line x1="80" y1="561" x2="330" y2="561" stroke="#000000" stroke-width="1.8" />
+      <line x1="80" y1="599" x2="330" y2="599" stroke="#000000" stroke-width="1.8" />
+      <line x1="125" y1="561" x2="125" y2="599" stroke="#000000" stroke-width="1.5" />
+      <text x="102" y="586" text-anchor="middle" font-size="15" font-weight="700" fill="#000">D4</text>
+      <text x="227" y="586" text-anchor="middle" font-size="13.5" font-weight="600" fill="#000">แฟ้มข้อมูลเงินกองกลางและเงินรุ่น</text>
+    </g>
+
+    <!-- PROCESS 4.1: ปรับปรุงยอดเงินกองกลางและเงินรุ่น -->
+    <g id="process-4-1">
+      <circle cx="500" cy="580" r="74" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <line x1="426" y1="570" x2="574" y2="570" stroke="#000000" stroke-width="1.5" />
+      <text x="500" y="552" text-anchor="middle" font-size="22" font-weight="700" fill="#000">4.1</text>
+      <text x="500" y="596" text-anchor="middle" font-size="14" font-weight="600" fill="#000">ปรับปรุงยอดเงิน</text>
+      <text x="500" y="620" text-anchor="middle" font-size="14" font-weight="600" fill="#000">กองกลางและเงินรุ่น</text>
+    </g>
+
+    <!-- ENTITY: เหรัญญิก / แอดมิน -->
+    <g id="entity-admin">
+      <rect x="750" y="525" width="200" height="110" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="850" y="575" text-anchor="middle" font-size="22" font-weight="700" fill="#000">เหรัญญิก / แอดมิน</text>
+      <text x="850" y="611" text-anchor="middle" font-size="17" font-weight="400" fill="#000">(Treasurer / Admin)</text>
+    </g>
+
+    <!-- ROW 3 (BOTTOM): OVERALL SUMMARY REPORT -->
+    <!-- PROCESS 4.3: สรุปรายงานสถานะการเงินและประวัติทั้งหมด -->
+    <g id="process-4-3">
+      <circle cx="500" cy="940" r="80" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <line x1="420" y1="930" x2="580" y2="930" stroke="#000000" stroke-width="1.5" />
+      <text x="500" y="910" text-anchor="middle" font-size="22" font-weight="700" fill="#000">4.3</text>
+      <text x="500" y="958" text-anchor="middle" font-size="15" font-weight="600" fill="#000">สรุปรายงานสถานะการเงิน</text>
+      <text x="500" y="982" text-anchor="middle" font-size="15" font-weight="600" fill="#000">และประวัติทั้งหมด</text>
+    </g>
+
+    <!-- FLOWS -->
+    <!-- ROW 1 FLOWS: D3 -> 4.2 -> นักศึกษา (แนวนอนตรง 100%) -->
+    <path d="M 750 250 L 580 250" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="665" y="238" text-anchor="middle" font-size="13" fill="#000" class="halo">ดึงประวัติชำระเงินเฉพาะบุคคล</text>
+
+    <path d="M 426 250 L 265 250" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="345" y="238" text-anchor="middle" font-size="13" fill="#000" class="halo">ประวัติชำระเงินและใบเสร็จ</text>
+
+    <!-- ROW 2 FLOWS: เหรัญญิก -> 4.1 -> D4 (แนวนอนตรง 100%) -->
+    <path d="M 750 580 L 580 580" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="665" y="568" text-anchor="middle" font-size="13" fill="#000" class="halo">ข้อมูลปรับปรุงยอดเงิน</text>
+
+    <path d="M 426 580 L 335 580" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="380" y="568" text-anchor="middle" font-size="13" fill="#000" class="halo">บันทึกยอดเงินคงเหลือ</text>
+
+    <!-- ROW 3 FLOWS: D4 -> 4.3 (ทางซ้าย) -->
+    <path d="M 205 599 L 205 940 L 415 940" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="310" y="928" text-anchor="middle" font-size="13" fill="#000" class="halo">ยอดเงินกองกลางและเงินรุ่น</text>
+
+    <!-- 4.3 -> เหรัญญิก (วิ่งออกขวาแล้วขึ้นตรงเข้าใต้แอดมิน ที่ x=850) -->
+    <path d="M 580 930 L 850 930 L 850 640" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="715" y="898" text-anchor="middle" font-size="12.5" fill="#000" class="halo">รายงานสรุปสถานะการเงิน</text>
+    <text x="715" y="918" text-anchor="middle" font-size="12.5" fill="#000" class="halo">ประวัติชำระทั้งหมด / ยอดกองกลาง</text>
+
+    <!-- D3 -> 4.3 (วิ่งลงทางขวา อ้อมขวาสุดที่ x=1050 ลงไปใต้ 4.3 ที่ y=1040 แล้วเลี้ยวเข้าใต้ 4.3 - ไม่ตัดกับเส้นใดๆ 100%) -->
+    <path d="M 990 250 L 1050 250 L 1050 1040 L 500 1040 L 500 1025" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)" />
+    <text x="760" y="1030" text-anchor="middle" font-size="13" fill="#000" class="halo">ข้อมูลประวัติชำระเงินทั้งหมด</text>
+
+    <!-- CAPTION -->
+    <text x="600" y="1575" text-anchor="middle" font-size="26" font-weight="700" fill="#000">DFD Level 1: Process 4.0</text>
+    <text x="600" y="1612" text-anchor="middle" font-size="19" font-weight="400" fill="#000">กระบวนการจัดทำรายงานและประวัติการเงิน (CampusPay)</text>
+  </svg>
+</body>
+</html>

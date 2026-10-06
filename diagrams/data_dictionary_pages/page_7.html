@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Dictionary Page 7</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #ffffff;
+      font-family: 'Sarabun', 'Leelawadee UI', Tahoma, sans-serif;
+      width: 1200px;
+      height: 1600px;
+      margin: 0;
+      padding: 80px 90px;
+      overflow: hidden;
+      color: #000000;
+    }
+    .data-element-card {
+      border: 1.8px solid #000000;
+      padding: 24px 30px;
+      width: 100%;
+      background: #ffffff;
+    }
+    .field-row {
+      display: flex;
+      line-height: 2.1;
+      font-size: 16px;
+    }
+    .label {
+      font-weight: 400;
+      color: #000000;
+      white-space: nowrap;
+      min-width: 320px;
+    }
+    .value {
+      color: #000000;
+      padding-left: 8px;
+    }
+    .val-title {
+      font-weight: 600;
+    }
+    .table-caption {
+      text-align: center;
+      font-size: 17px;
+      font-weight: 600;
+      margin-top: 14px;
+      margin-bottom: 35px;
+      color: #000000;
+    }
+    .spacer {
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">เลขที่บัญชีธนาคาร</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">bankAccount</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 30</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxx-x-xxxxx-x</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเป็นผู้กำหนด</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), เฉพาะตัวเลข</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">เลขบัญชีปลายทางที่รับโอนเงิน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 13 พจนานุกรมของหน่วยข้อมูลเลขที่บัญชีธนาคาร</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">ชื่อธนาคาร</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">bankName</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 50</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">xxxxxxxxxxxxxxxxxxxx</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเป็นผู้กำหนด</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null)</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">เช่น ธนาคารกรุงไทย, ธนาคารกสิกรไทย</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 14 พจนานุกรมของหน่วยข้อมูลชื่อธนาคาร</div>
+  
+</body>
+</html>

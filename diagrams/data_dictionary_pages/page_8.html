@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Dictionary Page 8</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #ffffff;
+      font-family: 'Sarabun', 'Leelawadee UI', Tahoma, sans-serif;
+      width: 1200px;
+      height: 1600px;
+      margin: 0;
+      padding: 80px 90px;
+      overflow: hidden;
+      color: #000000;
+    }
+    .data-element-card {
+      border: 1.8px solid #000000;
+      padding: 24px 30px;
+      width: 100%;
+      background: #ffffff;
+    }
+    .field-row {
+      display: flex;
+      line-height: 2.1;
+      font-size: 16px;
+    }
+    .label {
+      font-weight: 400;
+      color: #000000;
+      white-space: nowrap;
+      min-width: 320px;
+    }
+    .value {
+      color: #000000;
+      padding-left: 8px;
+    }
+    .val-title {
+      font-weight: 600;
+    }
+    .table-caption {
+      text-align: center;
+      font-size: 17px;
+      font-weight: 600;
+      margin-top: 14px;
+      margin-bottom: 35px;
+      color: #000000;
+    }
+    .spacer {
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">คิวอาร์โค้ดพร้อมเพย์</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">qrCodeUrl</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">Varchar 255 (URL)</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">https://...</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">จัดเก็บผ่านบริการ UploadThing CDN</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ยอมรับค่าว่างได้ (Nullable), รูปแบบ URL ถูกต้อง</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">รูปภาพ QR Code สำหรับสแกนชำระเงิน</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 15 พจนานุกรมของหน่วยข้อมูลคิวอาร์โค้ดพร้อมเพย์</div>
+  <div class="spacer"></div>
+    <div class="data-element-card">
+      <div class="field-row"><span class="label">ชื่อหน่วยข้อมูล (Data Element Name) :</span><span class="value val-title">วันเริ่มชำระเงิน</span></div>
+      <div class="field-row"><span class="label">ชื่ออื่น (Alternate Name) :</span><span class="value">startDate</span></div>
+      <div class="field-row"><span class="label">ประเภทและความยาว (Type and Length) :</span><span class="value">DateTime</span></div>
+      <div class="field-row"><span class="label">รูปแบบการแสดงผล (Output Format) :</span><span class="value">วว/ดด/ปปปป</span></div>
+      <div class="field-row"><span class="label">ค่าที่กำหนด (Default Value) :</span><span class="value">วันที่สร้างประกาศ</span></div>
+      <div class="field-row"><span class="label">แหล่งข้อมูล (Data Source) :</span><span class="value">แหล่งเก็บข้อมูลประกาศ (D2 Announcement)</span></div>
+      <div class="field-row"><span class="label">ความปลอดภัย (Security) :</span><span class="value">เหรัญญิก/แอดมินเป็นผู้กำหนด</span></div>
+      <div class="field-row"><span class="label">ผู้ใช้ที่รับผิดชอบ (Responsible End User) :</span><span class="value">เหรัญญิก / แอดมิน</span></div>
+      <div class="field-row"><span class="label">กฎการตรวจสอบความถูกต้อง (Validation Rule) :</span><span class="value">ห้ามเป็นค่าว่าง (Not Null), ต้องเป็นวันที่ไม่เกินวันครบกำหนด</span></div>
+      <div class="field-row"><span class="label">สูตรในการคำนวณ (Derivation Formula) :</span><span class="value">-</span></div>
+      <div class="field-row"><span class="label">หมายเหตุ :</span><span class="value">วันเริ่มต้นที่เปิดให้นักศึกษาส่งสลิป</span></div>
+    </div>
+    <div class="table-caption">ตารางที่ 16 พจนานุกรมของหน่วยข้อมูลวันเริ่มชำระเงิน</div>
+  
+</body>
+</html>
